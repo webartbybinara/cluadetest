@@ -1,698 +1,961 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Horizons — Curated Travel Experiences</title>
+  <title>Travel With Ishan — Sri Lanka Tours</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            ocean: {
-              50:  '#f0f9ff',
-              100: '#e0f2fe',
-              200: '#bae6fd',
-              300: '#7dd3fc',
-              400: '#38bdf8',
-              500: '#0ea5e9',
-              600: '#0284c7',
-              700: '#0369a1',
-              800: '#075985',
-              900: '#0c4a6e',
-              950: '#082f49',
-            },
-            midnight: '#0a1628',
-            coral: '#f97316',
-            sand: '#fef3e2',
+            teal:  { 50:'#f0fdfa', 100:'#ccfbf1', 400:'#2dd4bf', 600:'#0d9488', 700:'#0f766e', 800:'#115e59', 900:'#0d4a45' },
+            amber: { 400:'#fbbf24', 500:'#f59e0b', 600:'#d97706' },
+            forest:'#0a3d2e',
           },
           fontFamily: {
-            serif: ['Cormorant', 'Georgia', 'serif'],
-            sans:  ['Montserrat', 'system-ui', 'sans-serif'],
+            display: ['Playfair Display', 'serif'],
+            body:    ['Plus Jakarta Sans', 'sans-serif'],
+          },
+          animation: {
+            'float':       'float 6s ease-in-out infinite',
+            'float-slow':  'float 9s ease-in-out infinite',
+            'slide-up':    'slideUp .7s ease forwards',
+            'fade-in':     'fadeIn .8s ease forwards',
+            'spin-slow':   'spin 18s linear infinite',
+            'marquee':     'marquee 28s linear infinite',
+          },
+          keyframes: {
+            float:    { '0%,100%':{ transform:'translateY(0)' }, '50%':{ transform:'translateY(-18px)' } },
+            slideUp:  { from:{ opacity:'0', transform:'translateY(40px)' }, to:{ opacity:'1', transform:'translateY(0)' } },
+            fadeIn:   { from:{ opacity:'0' }, to:{ opacity:'1' } },
+            marquee:  { '0%':{ transform:'translateX(0)' }, '100%':{ transform:'translateX(-50%)' } },
           },
         },
       },
     }
   </script>
+
   <style>
-    html { scroll-behavior: smooth; }
+    body { font-family:'Plus Jakarta Sans',sans-serif; }
+    h1,h2,h3 { font-family:'Playfair Display',serif; }
 
-    .hero-img {
-      background-image: linear-gradient(to bottom, rgba(10,22,40,0.35) 0%, rgba(10,22,40,0.15) 40%, rgba(10,22,40,0.65) 100%),
-        url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1800&auto=format&fit=crop&q=80');
-      background-size: cover;
-      background-position: center 30%;
+    .wave-top {
+      clip-path: ellipse(100% 60% at 50% 100%);
+    }
+    .wave-bottom {
+      clip-path: ellipse(120% 55% at 50% 0%);
     }
 
-    .dest-card:hover .dest-img { transform: scale(1.07); }
-
-    @media (prefers-reduced-motion: no-preference) {
-      .fade-up {
-        opacity: 0;
-        transform: translateY(28px);
-        transition: opacity 0.7s ease, transform 0.7s ease;
-      }
-      .fade-up.visible { opacity: 1; transform: translateY(0); }
+    /* Gradient text */
+    .text-gradient {
+      background: linear-gradient(135deg,#f59e0b,#ef4444);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .text-gradient-teal {
+      background: linear-gradient(135deg,#0d9488,#0a3d2e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
-    .nav-scrolled {
-      background: rgba(10, 22, 40, 0.92) !important;
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+    /* Glass card */
+    .glass {
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.22);
     }
+
+    /* Scroll reveal */
+    .reveal { opacity:0; transform:translateY(36px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+
+    /* Card hover lift */
+    .card-lift { transition: transform .25s ease, box-shadow .25s ease; }
+    .card-lift:hover { transform:translateY(-8px); box-shadow:0 24px 48px rgba(0,0,0,.15); }
+
+    /* Animated border */
+    @keyframes borderPulse {
+      0%,100% { box-shadow:0 0 0 0 rgba(245,158,11,.4); }
+      50%      { box-shadow:0 0 0 10px rgba(245,158,11,0); }
+    }
+    .pulse-border { animation: borderPulse 2.5s ease-in-out infinite; }
+
+    /* Typing cursor */
+    .typing::after { content:'|'; animation:blink 1s step-end infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* Particles */
+    .particle {
+      position:absolute;
+      border-radius:50%;
+      background:rgba(255,255,255,.25);
+      animation:float 7s ease-in-out infinite;
+    }
+
+    /* Smooth number counter */
+    .counter { font-variant-numeric: tabular-nums; }
+
+    /* Nav scrolled */
+    .nav-scrolled { background:rgba(10,61,46,.95)!important; backdrop-filter:blur(12px); box-shadow:0 4px 24px rgba(0,0,0,.15); }
+
+    /* WhatsApp bounce */
+    @keyframes waBounce {
+      0%,100%{transform:scale(1)}
+      50%{transform:scale(1.12)}
+    }
+    .wa-btn { animation:waBounce 2s ease-in-out infinite; }
+
+    /* Image parallax helper */
+    .parallax-img { transform:scale(1.1); transition:transform 8s ease; }
   </style>
 </head>
-<body class="bg-white font-sans text-midnight antialiased">
+<body class="bg-white overflow-x-hidden" x-data="app()" @scroll.window="onScroll()">
 
-  <!-- ─── NAVBAR ─── -->
-  <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 px-6 lg:px-12 py-5">
+  <!-- ═══════════════════════════════════════════
+       FLOATING WHATSAPP BUTTON
+  ════════════════════════════════════════════ -->
+  <a href="https://wa.me/94771234567" target="_blank" aria-label="Chat on WhatsApp"
+     class="wa-btn fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-green-500 text-white rounded-full px-4 py-3 shadow-2xl cursor-pointer hover:bg-green-600 transition-colors duration-200">
+    <svg class="w-6 h-6 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    <span class="text-sm font-semibold hidden sm:inline">Chat with Ishan</span>
+  </a>
+
+  <!-- ═══════════════════════════════════════════
+       NAVBAR
+  ════════════════════════════════════════════ -->
+  <nav id="navbar" class="fixed top-0 left-0 right-0 z-40 transition-all duration-300 py-4 px-4 sm:px-8"
+       :class="scrolled ? 'nav-scrolled py-3' : 'bg-transparent'">
     <div class="max-w-7xl mx-auto flex items-center justify-between">
       <!-- Logo -->
-      <a href="#" class="font-serif text-2xl font-semibold tracking-wide text-white">
-        Horizons
+      <a href="#" class="flex items-center gap-2 group cursor-pointer">
+        <div class="w-9 h-9 bg-amber-500 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-200">
+          <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"/></svg>
+        </div>
+        <div>
+          <span class="text-white font-bold text-lg leading-tight block">Ishan Tours</span>
+          <span class="text-amber-400 text-[10px] tracking-widest uppercase font-medium">Sri Lanka</span>
+        </div>
       </a>
 
-      <!-- Desktop links -->
-      <ul class="hidden md:flex items-center gap-8 text-sm font-medium text-white/80">
-        <li><a href="#destinations" class="hover:text-white transition-colors duration-200 cursor-pointer">Destinations</a></li>
-        <li><a href="#experiences" class="hover:text-white transition-colors duration-200 cursor-pointer">Experiences</a></li>
-        <li><a href="#about" class="hover:text-white transition-colors duration-200 cursor-pointer">About</a></li>
-        <li><a href="#journal" class="hover:text-white transition-colors duration-200 cursor-pointer">Journal</a></li>
+      <!-- Desktop Nav -->
+      <ul class="hidden md:flex items-center gap-8">
+        <li><a href="#home"         class="text-white/90 hover:text-amber-400 text-sm font-medium transition-colors duration-200 cursor-pointer">Home</a></li>
+        <li><a href="#tours"        class="text-white/90 hover:text-amber-400 text-sm font-medium transition-colors duration-200 cursor-pointer">Tours</a></li>
+        <li><a href="#destinations" class="text-white/90 hover:text-amber-400 text-sm font-medium transition-colors duration-200 cursor-pointer">Destinations</a></li>
+        <li><a href="#pricing"      class="text-white/90 hover:text-amber-400 text-sm font-medium transition-colors duration-200 cursor-pointer">Packages</a></li>
+        <li><a href="#about"        class="text-white/90 hover:text-amber-400 text-sm font-medium transition-colors duration-200 cursor-pointer">About</a></li>
+        <li><a href="#contact"      class="bg-amber-500 hover:bg-amber-600 text-white text-sm font-semibold px-5 py-2.5 rounded-full transition-all duration-200 cursor-pointer shadow-lg hover:shadow-amber-500/30">Book Now</a></li>
       </ul>
 
-      <!-- CTA -->
-      <a href="#contact"
-         class="hidden md:inline-flex items-center gap-2 bg-coral text-white text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-orange-500 transition-colors duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-coral focus-visible:ring-offset-2">
-        Plan Your Trip
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-
-      <!-- Mobile menu button -->
-      <button id="menu-btn" aria-label="Open menu" class="md:hidden text-white cursor-pointer focus-visible:ring-2 focus-visible:ring-white rounded">
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <!-- Mobile Menu Toggle -->
+      <button @click="mobileMenu=!mobileMenu" class="md:hidden text-white p-2 cursor-pointer" aria-label="Toggle menu">
+        <svg x-show="!mobileMenu" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg x-show="mobileMenu"  class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div x-show="mobileMenu" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
+         class="md:hidden mt-4 bg-forest/95 backdrop-blur-md rounded-2xl p-6 mx-4">
+      <ul class="flex flex-col gap-4">
+        <li><a href="#home"         @click="mobileMenu=false" class="text-white/90 hover:text-amber-400 font-medium block cursor-pointer">Home</a></li>
+        <li><a href="#tours"        @click="mobileMenu=false" class="text-white/90 hover:text-amber-400 font-medium block cursor-pointer">Tours</a></li>
+        <li><a href="#destinations" @click="mobileMenu=false" class="text-white/90 hover:text-amber-400 font-medium block cursor-pointer">Destinations</a></li>
+        <li><a href="#pricing"      @click="mobileMenu=false" class="text-white/90 hover:text-amber-400 font-medium block cursor-pointer">Packages</a></li>
+        <li><a href="#about"        @click="mobileMenu=false" class="text-white/90 hover:text-amber-400 font-medium block cursor-pointer">About</a></li>
+        <li><a href="#contact"      @click="mobileMenu=false" class="bg-amber-500 text-white font-semibold px-5 py-2.5 rounded-full text-center block cursor-pointer">Book Now</a></li>
+      </ul>
     </div>
   </nav>
 
-  <!-- Mobile menu -->
-  <div id="mobile-menu" class="hidden fixed inset-0 z-40 bg-midnight/98 flex-col items-center justify-center gap-8">
-    <button id="close-menu" aria-label="Close menu" class="absolute top-6 right-6 text-white cursor-pointer">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-    </button>
-    <ul class="flex flex-col items-center gap-6 text-white text-2xl font-serif">
-      <li><a href="#destinations" class="hover:text-coral transition-colors cursor-pointer" onclick="closeMobileMenu()">Destinations</a></li>
-      <li><a href="#experiences" class="hover:text-coral transition-colors cursor-pointer" onclick="closeMobileMenu()">Experiences</a></li>
-      <li><a href="#about" class="hover:text-coral transition-colors cursor-pointer" onclick="closeMobileMenu()">About</a></li>
-      <li><a href="#journal" class="hover:text-coral transition-colors cursor-pointer" onclick="closeMobileMenu()">Journal</a></li>
-      <li><a href="#contact" class="text-coral" onclick="closeMobileMenu()">Plan Your Trip</a></li>
-    </ul>
-  </div>
+  <!-- ═══════════════════════════════════════════
+       HERO SECTION
+  ════════════════════════════════════════════ -->
+  <section id="home" class="relative min-h-screen flex items-center overflow-hidden">
+    <!-- Background image -->
+    <div class="absolute inset-0 z-0">
+      <img src="https://images.unsplash.com/photo-1586015555751-63bb77f4322a?w=1600&auto=format&fit=crop&q=80"
+           alt="Sri Lanka landscape" class="w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-r from-forest/90 via-forest/70 to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-forest/60 via-transparent to-transparent"></div>
+    </div>
 
+    <!-- Floating particles -->
+    <div class="particle w-3 h-3 top-1/4 left-1/4" style="animation-delay:0s"></div>
+    <div class="particle w-5 h-5 top-1/3 right-1/3" style="animation-delay:2s"></div>
+    <div class="particle w-2 h-2 bottom-1/3 left-1/3" style="animation-delay:4s"></div>
+    <div class="particle w-4 h-4 top-2/3 right-1/4" style="animation-delay:1s"></div>
 
-  <!-- ─── HERO ─── -->
-  <section class="hero-img min-h-screen flex flex-col justify-end pb-20 md:pb-28 px-6 lg:px-12">
-    <div class="max-w-7xl mx-auto w-full">
-      <!-- Tagline pill -->
-      <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white/90 text-xs font-medium tracking-widest uppercase px-4 py-2 rounded-full mb-6">
-        <span class="w-1.5 h-1.5 rounded-full bg-coral inline-block"></span>
-        Award-Winning Travel Curation
+    <!-- Spinning circle decoration -->
+    <div class="absolute right-16 top-24 w-64 h-64 border border-white/10 rounded-full animate-spin-slow hidden lg:block"></div>
+    <div class="absolute right-24 top-32 w-48 h-48 border border-amber-500/20 rounded-full animate-spin-slow hidden lg:block" style="animation-direction:reverse;animation-duration:12s"></div>
+
+    <!-- Content -->
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 pt-24 pb-32 grid lg:grid-cols-2 gap-12 items-center">
+      <div class="animate-slide-up">
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2 bg-amber-500/20 border border-amber-500/30 text-amber-400 text-xs font-semibold px-4 py-2 rounded-full mb-6 uppercase tracking-widest">
+          <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          Kandy's #1 Rated Tour Guide
+        </div>
+
+        <h1 class="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-tight mb-6">
+          Discover<br/>
+          <span class="text-gradient italic">Sri Lanka</span><br/>
+          <span class="text-white">With Ishan</span>
+        </h1>
+
+        <p class="text-white/75 text-lg leading-relaxed mb-8 max-w-lg">
+          Your gateway to authentic, unforgettable journeys across the Pearl of the Indian Ocean. Temples, tea estates, wildlife & culture — all curated just for you.
+        </p>
+
+        <!-- Search / CTA bar -->
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-2 flex flex-col sm:flex-row gap-2 mb-8 max-w-xl">
+          <div class="flex-1 flex items-center gap-3 px-4 py-2">
+            <svg class="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+            <span class="text-white/60 text-sm">Where to go in Sri Lanka?</span>
+          </div>
+          <a href="#tours" class="bg-amber-500 hover:bg-amber-600 text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all duration-200 text-center cursor-pointer shadow-lg">
+            Explore Tours
+          </a>
+        </div>
+
+        <!-- Stats row -->
+        <div class="flex items-center gap-6 flex-wrap">
+          <div class="text-center">
+            <div class="text-2xl font-bold text-white counter" x-text="counters.tours + '+'">0</div>
+            <div class="text-white/60 text-xs">Tours Done</div>
+          </div>
+          <div class="w-px h-8 bg-white/20"></div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-white counter" x-text="counters.clients + '+'">0</div>
+            <div class="text-white/60 text-xs">Happy Clients</div>
+          </div>
+          <div class="w-px h-8 bg-white/20"></div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-white counter" x-text="counters.rating">0</div>
+            <div class="text-white/60 text-xs">TripAdvisor Rating</div>
+          </div>
+          <div class="w-px h-8 bg-white/20"></div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-white counter" x-text="counters.years + ' Yrs'">0</div>
+            <div class="text-white/60 text-xs">Experience</div>
+          </div>
+        </div>
       </div>
 
-      <!-- Headline -->
-      <h1 class="font-serif text-5xl sm:text-6xl md:text-7xl lg:text-8xl text-white leading-[1.05] max-w-4xl mb-6">
-        The World,<br /><em>Reimagined</em> For You
-      </h1>
-
-      <!-- Subline -->
-      <p class="text-white/70 font-light text-base md:text-lg max-w-xl mb-10 leading-relaxed">
-        Handcrafted journeys to the world's most extraordinary places. We handle every detail so you arrive fully present.
-      </p>
-
-      <!-- Hero actions -->
-      <div class="flex flex-col sm:flex-row gap-4">
-        <a href="#destinations"
-           class="inline-flex items-center justify-center gap-2 bg-coral text-white font-semibold text-sm px-7 py-4 rounded-full hover:bg-orange-500 transition-colors duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-coral focus-visible:ring-offset-2">
-          Explore Destinations
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-        <a href="#about"
-           class="inline-flex items-center justify-center gap-2 border border-white/40 text-white font-medium text-sm px-7 py-4 rounded-full hover:border-white hover:bg-white/10 transition-all duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2">
-          Our Story
-        </a>
+      <!-- Hero image collage -->
+      <div class="hidden lg:block relative h-[520px]">
+        <!-- Main image -->
+        <div class="absolute top-0 right-0 w-72 h-80 rounded-3xl overflow-hidden shadow-2xl card-lift border-4 border-white/20">
+          <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&auto=format&fit=crop&q=80"
+               alt="Sigiriya Rock" class="w-full h-full object-cover" />
+          <div class="absolute bottom-4 left-4 glass text-white text-xs font-semibold px-3 py-1.5 rounded-full">
+            Sigiriya Rock
+          </div>
+        </div>
+        <!-- Second image -->
+        <div class="absolute bottom-0 left-0 w-60 h-64 rounded-3xl overflow-hidden shadow-2xl card-lift border-4 border-white/20 animate-float">
+          <img src="https://images.unsplash.com/photo-1598977502537-4e2e8dda7a61?w=600&auto=format&fit=crop&q=80"
+               alt="Kandy Temple" class="w-full h-full object-cover" />
+          <div class="absolute bottom-4 left-4 glass text-white text-xs font-semibold px-3 py-1.5 rounded-full">
+            Temple of Tooth
+          </div>
+        </div>
+        <!-- Third -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-3xl overflow-hidden shadow-2xl card-lift border-4 border-amber-500/40 animate-float-slow">
+          <img src="https://images.unsplash.com/photo-1540202404-1b927e27fa8b?w=400&auto=format&fit=crop&q=80"
+               alt="Tea Plantations" class="w-full h-full object-cover" />
+          <div class="absolute bottom-3 left-3 glass text-white text-xs font-semibold px-3 py-1.5 rounded-full">
+            Ella Tea Hills
+          </div>
+        </div>
+        <!-- Rating badge -->
+        <div class="absolute top-4 left-4 glass text-white rounded-2xl p-3 animate-float" style="animation-delay:3s">
+          <div class="flex items-center gap-1 mb-1">
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+          </div>
+          <div class="text-white text-xs font-bold">5.0 TripAdvisor</div>
+          <div class="text-white/60 text-[10px]">120+ Reviews</div>
+        </div>
       </div>
+    </div>
 
-      <!-- Stats row -->
-      <div class="flex flex-wrap gap-10 mt-14 border-t border-white/15 pt-10">
-        <div>
-          <p class="font-serif text-3xl text-white font-semibold">14+</p>
-          <p class="text-white/50 text-xs tracking-widest uppercase mt-1">Years Curating</p>
-        </div>
-        <div>
-          <p class="font-serif text-3xl text-white font-semibold">80+</p>
-          <p class="text-white/50 text-xs tracking-widest uppercase mt-1">Destinations</p>
-        </div>
-        <div>
-          <p class="font-serif text-3xl text-white font-semibold">3,200+</p>
-          <p class="text-white/50 text-xs tracking-widest uppercase mt-1">Happy Travelers</p>
-        </div>
-        <div>
-          <p class="font-serif text-3xl text-white font-semibold">98%</p>
-          <p class="text-white/50 text-xs tracking-widest uppercase mt-1">Satisfaction Rate</p>
-        </div>
+    <!-- Wave bottom -->
+    <div class="absolute bottom-0 left-0 right-0 z-10">
+      <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" class="w-full h-16 sm:h-20">
+        <path d="M0,80 C360,0 1080,80 1440,20 L1440,80 Z" fill="white"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       TRUSTED BRANDS / PARTNERS MARQUEE
+  ════════════════════════════════════════════ -->
+  <section class="bg-white py-8 overflow-hidden">
+    <p class="text-center text-gray-400 text-xs uppercase tracking-widest font-semibold mb-6">As Featured & Trusted By</p>
+    <div class="relative flex overflow-x-hidden">
+      <div class="flex gap-16 items-center animate-marquee whitespace-nowrap">
+        <span class="text-gray-300 font-bold text-xl">TripAdvisor</span>
+        <span class="text-gray-300 font-bold text-xl">Lonely Planet</span>
+        <span class="text-gray-300 font-bold text-xl">Booking.com</span>
+        <span class="text-gray-300 font-bold text-xl">GetYourGuide</span>
+        <span class="text-gray-300 font-bold text-xl">Viator</span>
+        <span class="text-gray-300 font-bold text-xl">Sri Lanka Tourism</span>
+        <span class="text-gray-300 font-bold text-xl">TripAdvisor</span>
+        <span class="text-gray-300 font-bold text-xl">Lonely Planet</span>
+        <span class="text-gray-300 font-bold text-xl">Booking.com</span>
+        <span class="text-gray-300 font-bold text-xl">GetYourGuide</span>
+        <span class="text-gray-300 font-bold text-xl">Viator</span>
+        <span class="text-gray-300 font-bold text-xl">Sri Lanka Tourism</span>
       </div>
     </div>
   </section>
 
-
-  <!-- ─── SEARCH BAR ─── -->
-  <section class="bg-white py-8 px-6 lg:px-12 border-b border-gray-100">
-    <div class="max-w-4xl mx-auto">
-      <div class="flex flex-col md:flex-row items-stretch md:items-center gap-3 bg-ocean-50 border border-ocean-100 rounded-2xl p-3">
-        <!-- Where -->
-        <div class="flex-1 flex items-center gap-3 px-4 py-2 bg-white rounded-xl border border-gray-200">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-ocean-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          <div>
-            <p class="text-[10px] font-semibold text-ocean-500 uppercase tracking-widest">Where</p>
-            <input type="text" placeholder="Search destination..." class="w-full text-sm text-midnight placeholder-gray-400 outline-none bg-transparent" aria-label="Search destination" />
-          </div>
-        </div>
-        <!-- When -->
-        <div class="flex-1 flex items-center gap-3 px-4 py-2 bg-white rounded-xl border border-gray-200">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-ocean-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-          <div>
-            <p class="text-[10px] font-semibold text-ocean-500 uppercase tracking-widest">When</p>
-            <input type="text" placeholder="Select dates..." class="w-full text-sm text-midnight placeholder-gray-400 outline-none bg-transparent" aria-label="Select dates" />
-          </div>
-        </div>
-        <!-- Travelers -->
-        <div class="flex-1 flex items-center gap-3 px-4 py-2 bg-white rounded-xl border border-gray-200">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-ocean-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
-          <div>
-            <p class="text-[10px] font-semibold text-ocean-500 uppercase tracking-widest">Travelers</p>
-            <input type="text" placeholder="Add travelers..." class="w-full text-sm text-midnight placeholder-gray-400 outline-none bg-transparent" aria-label="Add travelers" />
-          </div>
-        </div>
-        <!-- Button -->
-        <button class="flex items-center justify-center gap-2 bg-midnight text-white text-sm font-semibold px-7 py-3.5 rounded-xl hover:bg-ocean-900 transition-colors duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-midnight shrink-0">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          Search
-        </button>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ─── DESTINATIONS ─── -->
-  <section id="destinations" class="py-24 px-6 lg:px-12 bg-white">
+  <!-- ═══════════════════════════════════════════
+       HOW IT WORKS — 3 STEPS
+  ════════════════════════════════════════════ -->
+  <section id="tours" class="bg-white py-20 px-4 sm:px-8">
     <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <span class="text-amber-500 font-semibold text-sm uppercase tracking-widest">Simple Process</span>
+        <h2 class="text-4xl sm:text-5xl font-bold text-forest mt-2">
+          Easy Steps <span class="text-gradient italic">For Booking</span>
+        </h2>
+        <p class="text-gray-500 mt-4 max-w-xl mx-auto">Book your dream Sri Lanka tour in 3 simple steps. No hassle, no hidden fees — just pure adventure.</p>
+      </div>
 
-      <!-- Section header -->
-      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-14 fade-up">
+      <div class="grid md:grid-cols-3 gap-8 mb-16">
+        <!-- Step 1 -->
+        <div class="reveal card-lift bg-gradient-to-br from-teal-50 to-white border border-teal-100 rounded-3xl p-8 relative overflow-hidden cursor-pointer">
+          <div class="absolute top-4 right-4 text-teal-100 font-black text-6xl select-none">01</div>
+          <div class="w-16 h-16 bg-teal-700 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          </div>
+          <h3 class="text-xl font-bold text-forest mb-3">Choose Your Destination</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Browse our curated Sri Lanka tours — from ancient temples to wildlife safaris and misty tea hills.</p>
+        </div>
+        <!-- Step 2 -->
+        <div class="reveal card-lift bg-gradient-to-br from-amber-50 to-white border border-amber-100 rounded-3xl p-8 relative overflow-hidden cursor-pointer" style="transition-delay:.1s">
+          <div class="absolute top-4 right-4 text-amber-100 font-black text-6xl select-none">02</div>
+          <div class="w-16 h-16 bg-amber-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+          </div>
+          <h3 class="text-xl font-bold text-forest mb-3">Make Your Payment</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Secure, flexible payment options. Reserve your spot with a small deposit. No surprises.</p>
+        </div>
+        <!-- Step 3 -->
+        <div class="reveal card-lift bg-gradient-to-br from-green-50 to-white border border-green-100 rounded-3xl p-8 relative overflow-hidden cursor-pointer" style="transition-delay:.2s">
+          <div class="absolute top-4 right-4 text-green-100 font-black text-6xl select-none">03</div>
+          <div class="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+          </div>
+          <h3 class="text-xl font-bold text-forest mb-3">Enjoy Your Trip</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Meet Ishan, your expert local guide. Sit back and experience Sri Lanka like never before.</p>
+        </div>
+      </div>
+
+      <!-- CTA Banner -->
+      <div class="reveal bg-gradient-to-r from-amber-500 to-amber-600 rounded-3xl p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xl shadow-amber-200">
         <div>
-          <p class="text-coral text-xs font-semibold tracking-[0.2em] uppercase mb-3">Featured Destinations</p>
-          <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl text-midnight leading-tight">
-            Where Will You<br /><em>Go Next?</em>
+          <div class="flex items-baseline gap-3">
+            <span class="text-white text-5xl font-black">48+</span>
+            <span class="text-white/80 text-lg">Tours & Trip Packages</span>
+          </div>
+          <p class="text-white/70 text-sm mt-1">Available across Sri Lanka — custom day trips to week-long adventures</p>
+        </div>
+        <a href="#pricing" class="bg-white text-amber-600 font-bold px-8 py-4 rounded-2xl hover:bg-amber-50 transition-colors duration-200 cursor-pointer shadow-lg whitespace-nowrap">
+          Discover More
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       TRENDING DESTINATIONS
+  ════════════════════════════════════════════ -->
+  <section id="destinations" class="bg-teal-900 py-20 px-4 sm:px-8 relative overflow-hidden">
+    <!-- bg decoration -->
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-10 left-10 w-72 h-72 bg-teal-400 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-10 right-10 w-96 h-96 bg-amber-400 rounded-full blur-3xl"></div>
+    </div>
+
+    <!-- Wave top -->
+    <div class="absolute top-0 left-0 right-0 z-10">
+      <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" class="w-full h-16 rotate-180">
+        <path d="M0,80 C360,0 1080,80 1440,20 L1440,80 Z" fill="white"/>
+      </svg>
+    </div>
+
+    <div class="relative z-20 max-w-7xl mx-auto">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+        <div class="reveal">
+          <span class="text-amber-400 font-semibold text-sm uppercase tracking-widest">Explore</span>
+          <h2 class="text-4xl sm:text-5xl font-bold text-white mt-2">
+            Trending <span class="text-gradient italic">Destinations</span>
           </h2>
+          <p class="text-white/60 mt-3 max-w-lg">Hand-picked experiences that travellers love most in Sri Lanka right now.</p>
         </div>
-        <a href="#" class="text-sm font-medium text-ocean-600 hover:text-coral transition-colors duration-200 cursor-pointer flex items-center gap-1 self-start md:self-auto">
-          View all destinations
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+        <div class="mt-6 md:mt-0 flex gap-2">
+          <button @click="destSlide = Math.max(0, destSlide - 1)"
+                  class="w-11 h-11 bg-white/10 hover:bg-amber-500 border border-white/20 rounded-xl flex items-center justify-center text-white transition-all duration-200 cursor-pointer">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          </button>
+          <button @click="destSlide = Math.min(3, destSlide + 1)"
+                  class="w-11 h-11 bg-white/10 hover:bg-amber-500 border border-white/20 rounded-xl flex items-center justify-center text-white transition-all duration-200 cursor-pointer">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
       </div>
 
-      <!-- Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-        <!-- Card 1 — large -->
-        <article class="dest-card group lg:col-span-2 relative rounded-3xl overflow-hidden cursor-pointer h-[420px] md:h-[500px] fade-up">
-          <div class="dest-img absolute inset-0 transition-transform duration-700 ease-out">
-            <img src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=1200&auto=format&fit=crop&q=80"
-                 alt="Santorini, Greece — white domed churches overlooking the caldera"
-                 class="w-full h-full object-cover" loading="lazy" />
-            <div class="absolute inset-0 bg-gradient-to-t from-midnight/80 via-midnight/20 to-transparent"></div>
-          </div>
-          <div class="absolute bottom-0 left-0 right-0 p-8">
-            <div class="flex items-center gap-2 mb-3">
-              <span class="bg-coral text-white text-[10px] font-semibold tracking-widest uppercase px-3 py-1 rounded-full">Trending</span>
-            </div>
-            <h3 class="font-serif text-3xl md:text-4xl text-white font-medium mb-1">Santorini, Greece</h3>
-            <p class="text-white/60 text-sm mb-4">Cliffside villages · Volcanic beaches · Aegean sunsets</p>
-            <div class="flex items-center justify-between">
-              <p class="text-white text-sm">From <span class="font-semibold text-lg">€2,490</span> <span class="text-white/50">/person</span></p>
-              <span class="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center group-hover:bg-coral group-hover:border-coral transition-all duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </span>
+      <!-- Destination cards grid -->
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <template x-for="(dest, i) in destinations" :key="i">
+          <div class="reveal card-lift rounded-3xl overflow-hidden group cursor-pointer" :style="`transition-delay:${i*0.1}s`">
+            <div class="relative h-72">
+              <img :src="dest.img" :alt="dest.name" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+              <div class="absolute top-4 right-4 bg-amber-500 text-white text-xs font-bold px-3 py-1.5 rounded-full" x-text="dest.badge"></div>
+              <div class="absolute bottom-0 left-0 right-0 p-5">
+                <div class="flex items-center gap-1.5 mb-1">
+                  <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+                  <span class="text-white/70 text-xs" x-text="dest.location"></span>
+                </div>
+                <h3 class="text-white font-bold text-lg" x-text="dest.name"></h3>
+                <div class="flex items-center justify-between mt-2">
+                  <span class="text-amber-400 font-semibold text-sm" x-text="dest.price"></span>
+                  <span class="text-white/50 text-xs" x-text="dest.duration"></span>
+                </div>
+              </div>
             </div>
           </div>
-        </article>
-
-        <!-- Card 2 -->
-        <article class="dest-card group relative rounded-3xl overflow-hidden cursor-pointer h-[420px] md:h-[500px] fade-up">
-          <div class="dest-img absolute inset-0 transition-transform duration-700 ease-out">
-            <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&auto=format&fit=crop&q=80"
-                 alt="Kyoto, Japan — traditional temple among autumn maple trees"
-                 class="w-full h-full object-cover" loading="lazy" />
-            <div class="absolute inset-0 bg-gradient-to-t from-midnight/80 via-midnight/20 to-transparent"></div>
-          </div>
-          <div class="absolute bottom-0 left-0 right-0 p-6">
-            <h3 class="font-serif text-2xl md:text-3xl text-white font-medium mb-1">Kyoto, Japan</h3>
-            <p class="text-white/60 text-sm mb-4">Temples · Tea ceremonies · Bamboo groves</p>
-            <div class="flex items-center justify-between">
-              <p class="text-white text-sm">From <span class="font-semibold text-lg">$3,100</span> <span class="text-white/50">/person</span></p>
-              <span class="w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center group-hover:bg-coral group-hover:border-coral transition-all duration-300">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </span>
-            </div>
-          </div>
-        </article>
-
-        <!-- Card 3 -->
-        <article class="dest-card group relative rounded-3xl overflow-hidden cursor-pointer h-[300px] fade-up">
-          <div class="dest-img absolute inset-0 transition-transform duration-700 ease-out">
-            <img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=800&auto=format&fit=crop&q=80"
-                 alt="Maasai Mara, Kenya — savannah at golden hour with acacia trees"
-                 class="w-full h-full object-cover" loading="lazy" />
-            <div class="absolute inset-0 bg-gradient-to-t from-midnight/80 via-midnight/10 to-transparent"></div>
-          </div>
-          <div class="absolute bottom-0 left-0 right-0 p-6">
-            <h3 class="font-serif text-2xl text-white font-medium mb-1">Maasai Mara, Kenya</h3>
-            <p class="text-white/60 text-sm mb-3">Safari · Migration · Wilderness</p>
-            <p class="text-white text-sm">From <span class="font-semibold">$4,850</span> <span class="text-white/50">/person</span></p>
-          </div>
-        </article>
-
-        <!-- Card 4 -->
-        <article class="dest-card group relative rounded-3xl overflow-hidden cursor-pointer h-[300px] fade-up">
-          <div class="dest-img absolute inset-0 transition-transform duration-700 ease-out">
-            <img src="https://images.unsplash.com/photo-1548013146-72479768bada?w=800&auto=format&fit=crop&q=80"
-                 alt="Taj Mahal, India — iconic marble mausoleum reflected in water"
-                 class="w-full h-full object-cover" loading="lazy" />
-            <div class="absolute inset-0 bg-gradient-to-t from-midnight/80 via-midnight/10 to-transparent"></div>
-          </div>
-          <div class="absolute bottom-0 left-0 right-0 p-6">
-            <h3 class="font-serif text-2xl text-white font-medium mb-1">Rajasthan, India</h3>
-            <p class="text-white/60 text-sm mb-3">Palaces · Deserts · Culture</p>
-            <p class="text-white text-sm">From <span class="font-semibold">$2,200</span> <span class="text-white/50">/person</span></p>
-          </div>
-        </article>
-
-        <!-- Card 5 -->
-        <article class="dest-card group relative rounded-3xl overflow-hidden cursor-pointer h-[300px] fade-up">
-          <div class="dest-img absolute inset-0 transition-transform duration-700 ease-out">
-            <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&auto=format&fit=crop&q=80"
-                 alt="Patagonia, Chile — dramatic mountain peaks and turquoise lakes"
-                 class="w-full h-full object-cover" loading="lazy" />
-            <div class="absolute inset-0 bg-gradient-to-t from-midnight/80 via-midnight/10 to-transparent"></div>
-          </div>
-          <div class="absolute bottom-0 left-0 right-0 p-6">
-            <h3 class="font-serif text-2xl text-white font-medium mb-1">Patagonia, Chile</h3>
-            <p class="text-white/60 text-sm mb-3">Trekking · Glaciers · Raw nature</p>
-            <p class="text-white text-sm">From <span class="font-semibold">$3,600</span> <span class="text-white/50">/person</span></p>
-          </div>
-        </article>
-
+        </template>
       </div>
+
+      <!-- Category tabs -->
+      <div class="flex flex-wrap gap-3 mt-10 justify-center">
+        <template x-for="cat in ['All', 'Cultural', 'Nature', 'Wildlife', 'Beach', 'Adventure']" :key="cat">
+          <button class="px-5 py-2 rounded-full text-sm font-semibold border transition-all duration-200 cursor-pointer"
+                  :class="activeCategory === cat ? 'bg-amber-500 border-amber-500 text-white' : 'bg-white/10 border-white/20 text-white/70 hover:bg-white/20'"
+                  @click="activeCategory = cat"
+                  x-text="cat"></button>
+        </template>
+      </div>
+    </div>
+
+    <!-- Wave bottom -->
+    <div class="absolute bottom-0 left-0 right-0 z-10">
+      <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" class="w-full h-16">
+        <path d="M0,40 C360,120 1080,0 1440,60 L1440,80 L0,80 Z" fill="white"/>
+      </svg>
     </div>
   </section>
 
+  <!-- ═══════════════════════════════════════════
+       WHY CHOOSE US
+  ════════════════════════════════════════════ -->
+  <section class="bg-white py-20 px-4 sm:px-8">
+    <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+      <!-- Images side -->
+      <div class="relative h-[480px] reveal">
+        <img src="https://images.unsplash.com/photo-1516690561799-46d8f74f9abf?w=700&auto=format&fit=crop&q=80"
+             alt="Ishan with tourists" class="absolute top-0 left-0 w-72 h-80 object-cover rounded-3xl shadow-2xl" />
+        <img src="https://images.unsplash.com/photo-1611509530890-c89c9741e4d3?w=500&auto=format&fit=crop&q=80"
+             alt="Sri Lanka wildlife" class="absolute bottom-0 right-0 w-64 h-72 object-cover rounded-3xl shadow-xl border-4 border-white animate-float" />
+        <!-- Experience badge -->
+        <div class="absolute bottom-20 left-44 bg-teal-700 text-white rounded-2xl p-4 shadow-2xl pulse-border">
+          <div class="text-4xl font-black">10+</div>
+          <div class="text-teal-200 text-xs font-semibold uppercase tracking-wide">Years Experience</div>
+        </div>
+      </div>
 
-  <!-- ─── EXPERIENCES ─── -->
-  <section id="experiences" class="py-24 px-6 lg:px-12 bg-ocean-950">
-    <div class="max-w-7xl mx-auto">
-
-      <div class="text-center mb-16 fade-up">
-        <p class="text-coral text-xs font-semibold tracking-[0.2em] uppercase mb-3">How We Travel</p>
-        <h2 class="font-serif text-4xl md:text-5xl text-white leading-tight">
-          Curated <em>Experiences</em>
+      <!-- Content side -->
+      <div class="reveal">
+        <span class="text-amber-500 font-semibold text-sm uppercase tracking-widest">Why Us?</span>
+        <h2 class="text-4xl sm:text-5xl font-bold text-forest mt-2 mb-6">
+          We Recommend <span class="text-gradient italic">Beautiful</span><br/>
+          Destinations Every Month
         </h2>
-        <p class="text-white/50 mt-4 max-w-xl mx-auto leading-relaxed text-sm md:text-base">
-          Every journey is built around you — your pace, your passions, your perfect moments.
+        <p class="text-gray-500 leading-relaxed mb-8">
+          Ishan is your certified local expert — born and raised in Kandy. Every tour is personally designed to give you an authentic, deeply personal experience of Sri Lanka's culture, nature and people.
         </p>
-      </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
-        <!-- Exp 1 -->
-        <div class="group bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer fade-up">
-          <div class="w-12 h-12 rounded-2xl bg-coral/15 flex items-center justify-center mb-6 group-hover:bg-coral/25 transition-colors duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-coral" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <div class="space-y-4">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-forest">Trusted Local Guide</h4>
+              <p class="text-gray-500 text-sm">Certified by Sri Lanka Tourism with 10+ years of hands-on guiding experience.</p>
+            </div>
           </div>
-          <h3 class="font-serif text-xl text-white font-medium mb-2">Private Villas</h3>
-          <p class="text-white/50 text-sm leading-relaxed">Hand-selected boutique stays with exceptional character and service.</p>
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 bg-teal-100 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg class="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-forest">Flexible & On Time</h4>
+              <p class="text-gray-500 text-sm">Your schedule, your pace. We adapt tours to your needs with punctual pickup & drop.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+              <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064"/></svg>
+            </div>
+            <div>
+              <h4 class="font-bold text-forest">Mission & Vision</h4>
+              <p class="text-gray-500 text-sm">Responsible tourism that supports local communities and protects Sri Lanka's natural beauty.</p>
+            </div>
+          </div>
         </div>
 
-        <!-- Exp 2 -->
-        <div class="group bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer fade-up">
-          <div class="w-12 h-12 rounded-2xl bg-coral/15 flex items-center justify-center mb-6 group-hover:bg-coral/25 transition-colors duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-coral" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+        <div class="mt-10 flex items-center gap-4">
+          <a href="tel:+94771234567" class="bg-teal-700 hover:bg-teal-800 text-white font-semibold px-7 py-3.5 rounded-2xl transition-all duration-200 cursor-pointer shadow-lg flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+            Call Ishan
+          </a>
+          <div class="text-sm text-gray-500">
+            <div class="font-bold text-forest">+94 77 123 4567</div>
+            <div>Available 24/7</div>
           </div>
-          <h3 class="font-serif text-xl text-white font-medium mb-2">Local Immersion</h3>
-          <p class="text-white/50 text-sm leading-relaxed">Meet locals, learn traditions, and eat where residents actually eat.</p>
         </div>
-
-        <!-- Exp 3 -->
-        <div class="group bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer fade-up">
-          <div class="w-12 h-12 rounded-2xl bg-coral/15 flex items-center justify-center mb-6 group-hover:bg-coral/25 transition-colors duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-coral" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-          </div>
-          <h3 class="font-serif text-xl text-white font-medium mb-2">Bespoke Planning</h3>
-          <p class="text-white/50 text-sm leading-relaxed">Your personal travel designer crafts every detail from start to finish.</p>
-        </div>
-
-        <!-- Exp 4 -->
-        <div class="group bg-white/5 border border-white/10 rounded-3xl p-8 hover:bg-white/10 hover:border-white/20 transition-all duration-300 cursor-pointer fade-up">
-          <div class="w-12 h-12 rounded-2xl bg-coral/15 flex items-center justify-center mb-6 group-hover:bg-coral/25 transition-colors duration-300">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-coral" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.07 1.18 2 2 0 012.03 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.12 6.12l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
-          </div>
-          <h3 class="font-serif text-xl text-white font-medium mb-2">24/7 Concierge</h3>
-          <p class="text-white/50 text-sm leading-relaxed">Round-the-clock support so you're never alone when it matters most.</p>
-        </div>
-
       </div>
     </div>
   </section>
 
+  <!-- ═══════════════════════════════════════════
+       PRICING PACKAGES
+  ════════════════════════════════════════════ -->
+  <section id="pricing" class="bg-gradient-to-b from-teal-50 to-white py-20 px-4 sm:px-8 relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-96 h-96 bg-amber-100 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/3"></div>
 
-  <!-- ─── ABOUT / PHILOSOPHY ─── -->
-  <section id="about" class="py-24 px-6 lg:px-12 bg-sand">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
-      <!-- Image collage -->
-      <div class="relative h-[480px] fade-up">
-        <img src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=800&auto=format&fit=crop&q=80"
-             alt="Couple enjoying a scenic overlook on a Horizons journey"
-             class="absolute top-0 left-0 w-[70%] h-[75%] object-cover rounded-3xl shadow-xl" loading="lazy" />
-        <img src="https://images.unsplash.com/photo-1530521954074-e64f6810b32d?w=600&auto=format&fit=crop&q=80"
-             alt="Local market scene with vibrant colors and fresh produce"
-             class="absolute bottom-0 right-0 w-[55%] h-[55%] object-cover rounded-3xl shadow-xl border-4 border-sand" loading="lazy" />
-        <!-- Floating badge -->
-        <div class="absolute top-[60%] left-[55%] bg-midnight text-white px-5 py-4 rounded-2xl shadow-2xl text-center">
-          <p class="font-serif text-2xl font-semibold">14</p>
-          <p class="text-xs text-white/60 tracking-widest uppercase">Years</p>
-        </div>
-      </div>
-
-      <!-- Text -->
-      <div class="fade-up">
-        <p class="text-coral text-xs font-semibold tracking-[0.2em] uppercase mb-4">Our Philosophy</p>
-        <h2 class="font-serif text-4xl md:text-5xl text-midnight leading-tight mb-6">
-          Travel Should Feel<br /><em>Effortless</em>
+    <div class="relative max-w-7xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <span class="text-amber-500 font-semibold text-sm uppercase tracking-widest">Pricing</span>
+        <h2 class="text-4xl sm:text-5xl font-bold text-forest mt-2">
+          Price For <span class="text-gradient italic">Travel The World</span>
         </h2>
-        <p class="text-slate-600 leading-relaxed mb-4">
-          At Horizons, we believe the best journeys don't just show you new places — they change the way you see the world. For 14 years, we've partnered with local experts in every corner of the globe to create experiences that are authentic, seamless, and deeply personal.
-        </p>
-        <p class="text-slate-600 leading-relaxed mb-8">
-          We take care of every detail — flights, transfers, accommodation, guides, and those small unexpected moments that turn a good trip into a story you'll tell forever.
-        </p>
-        <div class="flex flex-wrap gap-6">
-          <div class="flex items-center gap-3">
-            <span class="w-8 h-8 rounded-full bg-ocean-100 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-ocean-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </span>
-            <span class="text-sm text-slate-700 font-medium">No hidden fees</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <span class="w-8 h-8 rounded-full bg-ocean-100 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-ocean-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </span>
-            <span class="text-sm text-slate-700 font-medium">Fully customizable</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <span class="w-8 h-8 rounded-full bg-ocean-100 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-ocean-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </span>
-            <span class="text-sm text-slate-700 font-medium">Local expertise</span>
-          </div>
-          <div class="flex items-center gap-3">
-            <span class="w-8 h-8 rounded-full bg-ocean-100 flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-ocean-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </span>
-            <span class="text-sm text-slate-700 font-medium">Sustainable travel</span>
-          </div>
-        </div>
-        <a href="#contact"
-           class="inline-flex items-center gap-2 mt-10 bg-midnight text-white font-semibold text-sm px-7 py-4 rounded-full hover:bg-ocean-900 transition-colors duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-midnight">
-          Meet Our Team
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+        <p class="text-gray-500 mt-4 max-w-xl mx-auto">Transparent pricing with no hidden costs. Choose the package that fits your dream.</p>
       </div>
 
-    </div>
-  </section>
-
-
-  <!-- ─── TESTIMONIALS ─── -->
-  <section class="py-24 px-6 lg:px-12 bg-white">
-    <div class="max-w-7xl mx-auto">
-
-      <div class="text-center mb-14 fade-up">
-        <p class="text-coral text-xs font-semibold tracking-[0.2em] uppercase mb-3">Traveler Stories</p>
-        <h2 class="font-serif text-4xl md:text-5xl text-midnight leading-tight">
-          Words From Our<br /><em>Travelers</em>
-        </h2>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-        <blockquote class="bg-ocean-50 border border-ocean-100 rounded-3xl p-8 fade-up">
-          <div class="flex gap-1 mb-5">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-coral fill-coral" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-coral fill-coral" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-coral fill-coral" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-coral fill-coral" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-coral fill-coral" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          </div>
-          <p class="text-slate-700 leading-relaxed mb-6 text-sm md:text-base italic font-serif">"The Kyoto trip was unlike anything we'd imagined. Every morning had a new discovery waiting. Horizons didn't just plan a vacation — they crafted an experience we'll never forget."</p>
-          <div class="flex items-center gap-3">
-            <img src="https://i.pravatar.cc/48?img=44" alt="Sarah M." class="w-10 h-10 rounded-full object-cover" loading="lazy" />
-            <div>
-              <p class="font-semibold text-sm text-midnight">Sarah M.</p>
-              <p class="text-xs text-slate-400">London, UK — Kyoto, Japan</p>
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- Basic -->
+        <div class="reveal card-lift bg-white rounded-3xl p-8 border border-gray-100 shadow-lg cursor-pointer">
+          <div class="mb-6">
+            <div class="inline-block bg-teal-100 text-teal-700 text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wide mb-4">Basic Tour</div>
+            <div class="flex items-baseline gap-1">
+              <span class="text-4xl font-black text-forest">$149</span>
+              <span class="text-gray-400 text-sm">/ person</span>
             </div>
+            <p class="text-gray-500 text-sm mt-2">Perfect for a quick Sri Lanka taste</p>
           </div>
-        </blockquote>
-
-        <blockquote class="bg-ocean-50 border border-ocean-100 rounded-3xl p-8 fade-up">
-          <div class="flex gap-1 mb-5">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-coral fill-coral" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-coral fill-coral" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-coral fill-coral" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-coral fill-coral" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-coral fill-coral" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          </div>
-          <p class="text-slate-700 leading-relaxed mb-6 text-sm md:text-base italic font-serif">"Patagonia was on our bucket list for years. The team at Horizons made it completely stress-free — from the remote lodge to the private hiking guide. Absolutely seamless."</p>
-          <div class="flex items-center gap-3">
-            <img src="https://i.pravatar.cc/48?img=12" alt="David & Clara R." class="w-10 h-10 rounded-full object-cover" loading="lazy" />
-            <div>
-              <p class="font-semibold text-sm text-midnight">David & Clara R.</p>
-              <p class="text-xs text-slate-400">New York, USA — Patagonia</p>
-            </div>
-          </div>
-        </blockquote>
-
-        <blockquote class="bg-ocean-50 border border-ocean-100 rounded-3xl p-8 fade-up">
-          <div class="flex gap-1 mb-5">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-coral fill-coral" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-coral fill-coral" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-coral fill-coral" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-coral fill-coral" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-coral fill-coral" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-          </div>
-          <p class="text-slate-700 leading-relaxed mb-6 text-sm md:text-base italic font-serif">"We asked for a honeymoon in Santorini that felt private and intimate. What we got exceeded every expectation. The sunset villa, the private boat — pure magic."</p>
-          <div class="flex items-center gap-3">
-            <img src="https://i.pravatar.cc/48?img=32" alt="Amara & James T." class="w-10 h-10 rounded-full object-cover" loading="lazy" />
-            <div>
-              <p class="font-semibold text-sm text-midnight">Amara & James T.</p>
-              <p class="text-xs text-slate-400">Dubai, UAE — Santorini</p>
-            </div>
-          </div>
-        </blockquote>
-
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ─── JOURNAL ─── -->
-  <section id="journal" class="py-24 px-6 lg:px-12 bg-white border-t border-gray-100">
-    <div class="max-w-7xl mx-auto">
-
-      <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-14 fade-up">
-        <div>
-          <p class="text-coral text-xs font-semibold tracking-[0.2em] uppercase mb-3">Travel Journal</p>
-          <h2 class="font-serif text-4xl md:text-5xl text-midnight leading-tight">Stories From<br /><em>The Road</em></h2>
-        </div>
-        <a href="#" class="text-sm font-medium text-ocean-600 hover:text-coral transition-colors cursor-pointer flex items-center gap-1 self-start md:self-auto">
-          Read all stories
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-        <article class="group cursor-pointer fade-up">
-          <div class="overflow-hidden rounded-2xl mb-5 h-56">
-            <img src="https://images.unsplash.com/photo-1466442929976-97f336a657be?w=600&auto=format&fit=crop&q=80"
-                 alt="Moroccan alleyway with colorful lanterns"
-                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-          </div>
-          <p class="text-xs text-ocean-500 font-semibold uppercase tracking-widest mb-2">Morocco · 5 min read</p>
-          <h3 class="font-serif text-xl text-midnight font-medium mb-2 group-hover:text-ocean-700 transition-colors">The Medinas That Time Forgot</h3>
-          <p class="text-slate-500 text-sm leading-relaxed">Wandering through the labyrinthine alleys of Fes, where artisans still work as they did centuries ago...</p>
-        </article>
-
-        <article class="group cursor-pointer fade-up">
-          <div class="overflow-hidden rounded-2xl mb-5 h-56">
-            <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&auto=format&fit=crop&q=80"
-                 alt="Norwegian fjord with mirror-like water at sunrise"
-                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-          </div>
-          <p class="text-xs text-ocean-500 font-semibold uppercase tracking-widest mb-2">Norway · 7 min read</p>
-          <h3 class="font-serif text-xl text-midnight font-medium mb-2 group-hover:text-ocean-700 transition-colors">Chasing Silence in the Fjords</h3>
-          <p class="text-slate-500 text-sm leading-relaxed">There are places in this world where the silence is so complete it feels like a sound of its own. The Norwegian fjords are one of them...</p>
-        </article>
-
-        <article class="group cursor-pointer fade-up">
-          <div class="overflow-hidden rounded-2xl mb-5 h-56">
-            <img src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=600&auto=format&fit=crop&q=80"
-                 alt="Thai temple with monks at golden hour"
-                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
-          </div>
-          <p class="text-xs text-ocean-500 font-semibold uppercase tracking-widest mb-2">Thailand · 6 min read</p>
-          <h3 class="font-serif text-xl text-midnight font-medium mb-2 group-hover:text-ocean-700 transition-colors">Dawn Alms Ceremony in Chiang Mai</h3>
-          <p class="text-slate-500 text-sm leading-relaxed">At 5am the city is still dark, but monks in saffron robes are already walking the streets in perfect procession...</p>
-        </article>
-
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ─── CTA BANNER ─── -->
-  <section id="contact" class="py-28 px-6 lg:px-12 bg-midnight">
-    <div class="max-w-4xl mx-auto text-center fade-up">
-      <p class="text-coral text-xs font-semibold tracking-[0.2em] uppercase mb-4">Start Your Journey</p>
-      <h2 class="font-serif text-4xl md:text-6xl text-white leading-tight mb-6">
-        Your Next Adventure<br />Begins <em>Here</em>
-      </h2>
-      <p class="text-white/50 text-base leading-relaxed max-w-xl mx-auto mb-10">
-        Tell us where you dream of going. Our travel designers will craft a journey that's entirely, unmistakably yours.
-      </p>
-      <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto" onsubmit="return false;">
-        <label for="cta-email" class="sr-only">Your email address</label>
-        <input id="cta-email" type="email" placeholder="your@email.com" required
-               class="flex-1 bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm rounded-full px-6 py-3.5 outline-none focus-visible:border-coral focus-visible:ring-1 focus-visible:ring-coral transition-colors" />
-        <button type="submit"
-                class="bg-coral text-white font-semibold text-sm px-7 py-3.5 rounded-full hover:bg-orange-500 transition-colors duration-200 cursor-pointer focus-visible:ring-2 focus-visible:ring-coral whitespace-nowrap">
-          Get in Touch
-        </button>
-      </form>
-      <p class="text-white/30 text-xs mt-4">No spam. A travel designer will reach out within 24 hours.</p>
-    </div>
-  </section>
-
-
-  <!-- ─── FOOTER ─── -->
-  <footer class="bg-ocean-950 py-14 px-6 lg:px-12 border-t border-white/5">
-    <div class="max-w-7xl mx-auto">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-10 mb-12">
-        <div class="col-span-2 md:col-span-1">
-          <a href="#" class="font-serif text-2xl text-white font-semibold">Horizons</a>
-          <p class="text-white/40 text-sm mt-3 leading-relaxed max-w-[200px]">Curated travel experiences for the curious and the bold.</p>
-        </div>
-        <div>
-          <p class="text-white/70 text-xs font-semibold tracking-widest uppercase mb-4">Explore</p>
-          <ul class="space-y-2 text-sm text-white/40">
-            <li><a href="#destinations" class="hover:text-white/80 transition-colors cursor-pointer">Destinations</a></li>
-            <li><a href="#experiences" class="hover:text-white/80 transition-colors cursor-pointer">Experiences</a></li>
-            <li><a href="#about" class="hover:text-white/80 transition-colors cursor-pointer">About Us</a></li>
-            <li><a href="#journal" class="hover:text-white/80 transition-colors cursor-pointer">Journal</a></li>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-center gap-3 text-sm text-gray-600">
+              <svg class="w-4 h-4 text-teal-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>1 Day Tour (up to 10hrs)
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-600">
+              <svg class="w-4 h-4 text-teal-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Hotel pickup & drop
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-600">
+              <svg class="w-4 h-4 text-teal-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>2 Destinations
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-400">
+              <svg class="w-4 h-4 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>Meals not included
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-400">
+              <svg class="w-4 h-4 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>No customisation
+            </li>
           </ul>
+          <a href="#contact" class="block text-center bg-teal-50 hover:bg-teal-700 hover:text-white text-teal-700 font-semibold py-3.5 rounded-2xl transition-all duration-200 cursor-pointer">Book Now</a>
         </div>
-        <div>
-          <p class="text-white/70 text-xs font-semibold tracking-widest uppercase mb-4">Company</p>
-          <ul class="space-y-2 text-sm text-white/40">
-            <li><a href="#" class="hover:text-white/80 transition-colors cursor-pointer">Careers</a></li>
-            <li><a href="#" class="hover:text-white/80 transition-colors cursor-pointer">Press</a></li>
-            <li><a href="#" class="hover:text-white/80 transition-colors cursor-pointer">Partners</a></li>
-            <li><a href="#" class="hover:text-white/80 transition-colors cursor-pointer">Sustainability</a></li>
+
+        <!-- Standard — POPULAR -->
+        <div class="reveal card-lift bg-teal-700 rounded-3xl p-8 shadow-2xl shadow-teal-200 cursor-pointer relative scale-105 border-2 border-amber-400">
+          <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-amber-500 text-white text-xs font-bold px-5 py-1.5 rounded-full uppercase tracking-wide shadow-lg">Most Popular</div>
+          <div class="mb-6">
+            <div class="inline-block bg-white/20 text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wide mb-4">Standard Tour</div>
+            <div class="flex items-baseline gap-1">
+              <span class="text-4xl font-black text-white">$349</span>
+              <span class="text-white/60 text-sm">/ person</span>
+            </div>
+            <p class="text-white/70 text-sm mt-2">The complete Sri Lanka experience</p>
+          </div>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-center gap-3 text-sm text-white/90">
+              <svg class="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>3 Day Tour
+            </li>
+            <li class="flex items-center gap-3 text-sm text-white/90">
+              <svg class="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Hotel pickup & drop
+            </li>
+            <li class="flex items-center gap-3 text-sm text-white/90">
+              <svg class="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>5 Destinations
+            </li>
+            <li class="flex items-center gap-3 text-sm text-white/90">
+              <svg class="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Lunch included
+            </li>
+            <li class="flex items-center gap-3 text-sm text-white/90">
+              <svg class="w-4 h-4 text-amber-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Flexible itinerary
+            </li>
           </ul>
+          <a href="#contact" class="block text-center bg-amber-500 hover:bg-amber-600 text-white font-semibold py-3.5 rounded-2xl transition-all duration-200 cursor-pointer shadow-lg">Book Now</a>
         </div>
-        <div>
-          <p class="text-white/70 text-xs font-semibold tracking-widest uppercase mb-4">Follow Us</p>
-          <div class="flex gap-3">
-            <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-white/40 hover:text-white hover:border-white/40 transition-all duration-200 cursor-pointer">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-            </a>
-            <a href="#" aria-label="Twitter / X" class="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-white/40 hover:text-white hover:border-white/40 transition-all duration-200 cursor-pointer">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
-            </a>
-            <a href="#" aria-label="Pinterest" class="w-9 h-9 rounded-full border border-white/15 flex items-center justify-center text-white/40 hover:text-white hover:border-white/40 transition-all duration-200 cursor-pointer">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.04-2.83.18-.76 1.22-5.17 1.22-5.17s-.31-.62-.31-1.55c0-1.45.84-2.53 1.89-2.53.89 0 1.32.67 1.32 1.47 0 .9-.57 2.24-.87 3.48-.25 1.04.52 1.89 1.54 1.89 1.85 0 3.28-1.95 3.28-4.77 0-2.49-1.79-4.23-4.35-4.23-2.96 0-4.7 2.22-4.7 4.51 0 .89.34 1.85.77 2.37.08.1.09.2.07.3-.08.32-.25 1.04-.29 1.18-.05.19-.16.23-.37.14-1.39-.65-2.26-2.68-2.26-4.32 0-3.51 2.55-6.74 7.35-6.74 3.86 0 6.86 2.75 6.86 6.42 0 3.83-2.41 6.9-5.76 6.9-1.13 0-2.19-.59-2.55-1.28l-.69 2.58c-.25.96-.93 2.16-1.39 2.89.04.01.09.02.13.03A10 10 0 0022 12c0-5.52-4.48-10-10-10z"/></svg>
-            </a>
+
+        <!-- Premium -->
+        <div class="reveal card-lift bg-white rounded-3xl p-8 border border-gray-100 shadow-lg cursor-pointer" style="transition-delay:.2s">
+          <div class="mb-6">
+            <div class="inline-block bg-amber-100 text-amber-700 text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wide mb-4">Premium Tour</div>
+            <div class="flex items-baseline gap-1">
+              <span class="text-4xl font-black text-forest">$699</span>
+              <span class="text-gray-400 text-sm">/ person</span>
+            </div>
+            <p class="text-gray-500 text-sm mt-2">All-inclusive luxury Sri Lanka journey</p>
+          </div>
+          <ul class="space-y-3 mb-8">
+            <li class="flex items-center gap-3 text-sm text-gray-600">
+              <svg class="w-4 h-4 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>7 Day Full Island Tour
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-600">
+              <svg class="w-4 h-4 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Airport transfers
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-600">
+              <svg class="w-4 h-4 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>All meals included
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-600">
+              <svg class="w-4 h-4 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Hotel accommodation
+            </li>
+            <li class="flex items-center gap-3 text-sm text-gray-600">
+              <svg class="w-4 h-4 text-amber-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>Fully customisable
+            </li>
+          </ul>
+          <a href="#contact" class="block text-center bg-amber-50 hover:bg-amber-500 hover:text-white text-amber-600 font-semibold py-3.5 rounded-2xl transition-all duration-200 cursor-pointer">Book Now</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       TESTIMONIALS
+  ════════════════════════════════════════════ -->
+  <section class="bg-white py-20 px-4 sm:px-8 relative overflow-hidden">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-teal-50 rounded-full blur-3xl opacity-60"></div>
+
+    <div class="relative max-w-7xl mx-auto">
+      <div class="text-center mb-16 reveal">
+        <span class="text-amber-500 font-semibold text-sm uppercase tracking-widest">Our Clients Say</span>
+        <h2 class="text-4xl sm:text-5xl font-bold text-forest mt-2">
+          <span class="text-gradient-teal italic">Testimonial</span>
+        </h2>
+      </div>
+
+      <!-- Testimonial slider -->
+      <div class="relative overflow-hidden" x-ref="testimonialsSlider">
+        <div class="grid md:grid-cols-3 gap-6">
+          <template x-for="(t, i) in testimonials" :key="i">
+            <div class="reveal card-lift bg-white border border-gray-100 rounded-3xl p-7 shadow-lg cursor-default" :style="`transition-delay:${i*0.1}s`">
+              <div class="flex items-center gap-1 mb-4">
+                <template x-for="s in 5" :key="s">
+                  <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                </template>
+              </div>
+              <p class="text-gray-600 text-sm leading-relaxed italic mb-6" x-text="`"${t.text}"`"></p>
+              <div class="flex items-center gap-3">
+                <img :src="t.avatar" :alt="t.name" class="w-11 h-11 rounded-full object-cover ring-2 ring-amber-200" />
+                <div>
+                  <div class="font-bold text-forest text-sm" x-text="t.name"></div>
+                  <div class="text-gray-400 text-xs" x-text="t.location"></div>
+                </div>
+                <div class="ml-auto">
+                  <svg class="w-8 h-8 text-amber-100" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                </div>
+              </div>
+              <div class="mt-4 pt-4 border-t border-gray-50">
+                <span class="text-xs text-teal-600 font-semibold bg-teal-50 px-3 py-1 rounded-full" x-text="t.tour"></span>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       ABOUT / CTA SPLIT
+  ════════════════════════════════════════════ -->
+  <section id="about" class="bg-forest py-20 px-4 sm:px-8 relative overflow-hidden">
+    <div class="absolute inset-0">
+      <img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=1400&auto=format&fit=crop&q=80"
+           alt="Sri Lanka background" class="w-full h-full object-cover opacity-20" />
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-r from-forest/95 to-forest/60"></div>
+
+    <div class="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+      <div class="reveal">
+        <span class="text-amber-400 font-semibold text-sm uppercase tracking-widest">About Ishan</span>
+        <h2 class="text-4xl sm:text-5xl font-bold text-white mt-2 mb-6">
+          Your Personal<br/><span class="text-gradient italic">Sri Lanka Expert</span>
+        </h2>
+        <p class="text-white/70 leading-relaxed mb-6">
+          Born in the hill country of Kandy, Ishan has spent over a decade sharing the magic of Sri Lanka with travellers from around the world. From the ancient ruins of Polonnaruwa to the golden beaches of the south — he knows every hidden gem.
+        </p>
+        <p class="text-white/70 leading-relaxed mb-8">
+          With a perfect 5-star rating on TripAdvisor and hundreds of glowing reviews, Ishan is more than a guide — he's a friend who makes your Sri Lanka story unforgettable.
+        </p>
+        <div class="flex gap-8">
+          <div>
+            <div class="text-3xl font-black text-amber-400">500+</div>
+            <div class="text-white/60 text-sm">Happy Travellers</div>
+          </div>
+          <div>
+            <div class="text-3xl font-black text-amber-400">48+</div>
+            <div class="text-white/60 text-sm">Tour Routes</div>
+          </div>
+          <div>
+            <div class="text-3xl font-black text-amber-400">5★</div>
+            <div class="text-white/60 text-sm">TripAdvisor</div>
           </div>
         </div>
       </div>
 
-      <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-white/30">
-        <p>© 2025 Horizons Travel. All rights reserved.</p>
-        <div class="flex gap-6">
-          <a href="#" class="hover:text-white/60 transition-colors cursor-pointer">Privacy Policy</a>
-          <a href="#" class="hover:text-white/60 transition-colors cursor-pointer">Terms of Service</a>
-          <a href="#" class="hover:text-white/60 transition-colors cursor-pointer">Cookie Preferences</a>
+      <!-- Contact form inset -->
+      <div id="contact" class="reveal bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-8">
+        <h3 class="text-2xl font-bold text-white mb-2">Reach & Get In Touch</h3>
+        <p class="text-white/60 text-sm mb-6">Tell us about your dream Sri Lanka trip and we'll plan it for you.</p>
+
+        <form class="space-y-4" @submit.prevent="submitForm()">
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="text-white/70 text-xs font-semibold uppercase tracking-wide mb-2 block" for="fname">First Name</label>
+              <input id="fname" type="text" placeholder="Your name" required
+                     class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-400 focus:bg-white/15 transition-all duration-200" />
+            </div>
+            <div>
+              <label class="text-white/70 text-xs font-semibold uppercase tracking-wide mb-2 block" for="femail">Email</label>
+              <input id="femail" type="email" placeholder="your@email.com" required
+                     class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-400 focus:bg-white/15 transition-all duration-200" />
+            </div>
+          </div>
+          <div>
+            <label class="text-white/70 text-xs font-semibold uppercase tracking-wide mb-2 block" for="ftour">Tour Interest</label>
+            <select id="ftour" class="w-full bg-white/10 border border-white/20 text-white rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-400 transition-all duration-200 cursor-pointer">
+              <option value="" class="text-forest">Select a tour type</option>
+              <option value="day" class="text-forest">Day Trip</option>
+              <option value="3day" class="text-forest">3 Day Package</option>
+              <option value="week" class="text-forest">Full Week Tour</option>
+              <option value="custom" class="text-forest">Custom Tour</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-white/70 text-xs font-semibold uppercase tracking-wide mb-2 block" for="fmsg">Message</label>
+            <textarea id="fmsg" rows="3" placeholder="Tell us about your group, dates, interests..."
+                      class="w-full bg-white/10 border border-white/20 text-white placeholder-white/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-400 focus:bg-white/15 transition-all duration-200 resize-none"></textarea>
+          </div>
+          <button type="submit"
+                  class="w-full bg-amber-500 hover:bg-amber-600 text-white font-semibold py-4 rounded-2xl transition-all duration-200 cursor-pointer shadow-lg hover:shadow-amber-500/30 flex items-center justify-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+            Send Message
+          </button>
+        </form>
+
+        <div x-show="formSuccess" x-transition class="mt-4 bg-green-500/20 border border-green-400/30 text-green-300 text-sm rounded-xl px-4 py-3 text-center">
+          Message sent! Ishan will reply within a few hours.
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════════ -->
+  <footer class="bg-forest text-white">
+    <!-- Newsletter bar -->
+    <div class="bg-amber-500">
+      <div class="max-w-7xl mx-auto px-4 sm:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+          <h3 class="font-bold text-white text-lg">Subscribe for Travel Deals</h3>
+          <p class="text-white/80 text-sm">Get exclusive Sri Lanka tour offers in your inbox.</p>
+        </div>
+        <div class="flex gap-2 w-full sm:w-auto">
+          <input type="email" placeholder="Enter your email"
+                 class="flex-1 sm:w-64 bg-white/20 border border-white/30 text-white placeholder-white/60 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:bg-white/30 transition-all duration-200" />
+          <button class="bg-forest hover:bg-teal-900 text-white font-semibold px-5 py-2.5 rounded-xl transition-all duration-200 cursor-pointer text-sm whitespace-nowrap">
+            Subscribe
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main footer -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 py-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-10">
+      <!-- Brand -->
+      <div>
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-9 h-9 bg-amber-500 rounded-xl flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064"/></svg>
+          </div>
+          <div>
+            <span class="font-bold text-lg block leading-tight">Ishan Tours</span>
+            <span class="text-amber-400 text-[10px] tracking-widest uppercase">Sri Lanka</span>
+          </div>
+        </div>
+        <p class="text-white/50 text-sm leading-relaxed mb-6">Authentic Sri Lanka experiences, led by your trusted local guide from Kandy.</p>
+        <div class="flex gap-3">
+          <a href="#" aria-label="Facebook" class="w-9 h-9 bg-white/10 hover:bg-amber-500 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+          </a>
+          <a href="#" aria-label="Instagram" class="w-9 h-9 bg-white/10 hover:bg-amber-500 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke-width="2" stroke-linecap="round"/></svg>
+          </a>
+          <a href="https://wa.me/94771234567" aria-label="WhatsApp" class="w-9 h-9 bg-white/10 hover:bg-green-500 rounded-lg flex items-center justify-center transition-all duration-200 cursor-pointer">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Destinations -->
+      <div>
+        <h4 class="font-bold mb-5 text-sm uppercase tracking-widest text-white/80">Destinations</h4>
+        <ul class="space-y-2.5">
+          <li><a href="#" class="text-white/50 hover:text-amber-400 text-sm transition-colors duration-200 cursor-pointer">Kandy City Tour</a></li>
+          <li><a href="#" class="text-white/50 hover:text-amber-400 text-sm transition-colors duration-200 cursor-pointer">Sigiriya & Dambulla</a></li>
+          <li><a href="#" class="text-white/50 hover:text-amber-400 text-sm transition-colors duration-200 cursor-pointer">Ella & Nine Arches</a></li>
+          <li><a href="#" class="text-white/50 hover:text-amber-400 text-sm transition-colors duration-200 cursor-pointer">Yala Wildlife Safari</a></li>
+          <li><a href="#" class="text-white/50 hover:text-amber-400 text-sm transition-colors duration-200 cursor-pointer">Mirissa Beach</a></li>
+          <li><a href="#" class="text-white/50 hover:text-amber-400 text-sm transition-colors duration-200 cursor-pointer">Nuwara Eliya Tea</a></li>
+        </ul>
+      </div>
+
+      <!-- Explore -->
+      <div>
+        <h4 class="font-bold mb-5 text-sm uppercase tracking-widest text-white/80">Explore</h4>
+        <ul class="space-y-2.5">
+          <li><a href="#tours"   class="text-white/50 hover:text-amber-400 text-sm transition-colors duration-200 cursor-pointer">Our Tours</a></li>
+          <li><a href="#pricing" class="text-white/50 hover:text-amber-400 text-sm transition-colors duration-200 cursor-pointer">Pricing</a></li>
+          <li><a href="#about"   class="text-white/50 hover:text-amber-400 text-sm transition-colors duration-200 cursor-pointer">About Ishan</a></li>
+          <li><a href="#contact" class="text-white/50 hover:text-amber-400 text-sm transition-colors duration-200 cursor-pointer">Contact</a></li>
+          <li><a href="#"        class="text-white/50 hover:text-amber-400 text-sm transition-colors duration-200 cursor-pointer">Travel Blog</a></li>
+          <li><a href="#"        class="text-white/50 hover:text-amber-400 text-sm transition-colors duration-200 cursor-pointer">Gallery</a></li>
+        </ul>
+      </div>
+
+      <!-- Contact info -->
+      <div>
+        <h4 class="font-bold mb-5 text-sm uppercase tracking-widest text-white/80">Legal & Contact</h4>
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3 text-white/50 text-sm">
+            <svg class="w-4 h-4 mt-0.5 flex-shrink-0 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+            +94 77 123 4567
+          </li>
+          <li class="flex items-start gap-3 text-white/50 text-sm">
+            <svg class="w-4 h-4 mt-0.5 flex-shrink-0 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            ishan@travelwithishan.com
+          </li>
+          <li class="flex items-start gap-3 text-white/50 text-sm">
+            <svg class="w-4 h-4 mt-0.5 flex-shrink-0 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+            Kandy, Central Province, Sri Lanka
+          </li>
+        </ul>
+        <div class="mt-5 space-y-1">
+          <a href="#" class="text-white/50 hover:text-amber-400 text-sm block transition-colors duration-200 cursor-pointer">Privacy Policy</a>
+          <a href="#" class="text-white/50 hover:text-amber-400 text-sm block transition-colors duration-200 cursor-pointer">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="border-t border-white/10 py-5">
+      <div class="max-w-7xl mx-auto px-4 sm:px-8 flex flex-col sm:flex-row justify-between items-center gap-2 text-white/40 text-xs">
+        <span>© 2024 Travel With Ishan Tours. All rights reserved.</span>
+        <span>Made with ❤️ in Kandy, Sri Lanka</span>
       </div>
     </div>
   </footer>
 
-
-  <!-- ─── SCRIPTS ─── -->
+  <!-- ═══════════════════════════════════════════
+       ALPINE.JS APP
+  ════════════════════════════════════════════ -->
   <script>
-    // Navbar scroll effect
-    const navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 60) {
-        navbar.classList.add('nav-scrolled');
-      } else {
-        navbar.classList.remove('nav-scrolled');
-      }
-    }, { passive: true });
+    function app() {
+      return {
+        scrolled: false,
+        mobileMenu: false,
+        destSlide: 0,
+        activeCategory: 'All',
+        formSuccess: false,
+        counters: { tours: 0, clients: 0, rating: '0.0', years: 0 },
+        countersStarted: false,
 
-    // Mobile menu
-    const menuBtn = document.getElementById('menu-btn');
-    const closeBtn = document.getElementById('close-menu');
-    const mobileMenu = document.getElementById('mobile-menu');
+        destinations: [
+          { name:'Sigiriya Rock Fortress', location:'North Central', badge:'UNESCO', img:'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&auto=format&fit=crop&q=80', price:'From $89', duration:'Full Day' },
+          { name:'Temple of the Tooth', location:'Kandy', badge:'Cultural', img:'https://images.unsplash.com/photo-1598977502537-4e2e8dda7a61?w=600&auto=format&fit=crop&q=80', price:'From $49', duration:'Half Day' },
+          { name:'Ella Nine Arches Bridge', location:'Ella', badge:'Scenic', img:'https://images.unsplash.com/photo-1540202404-1b927e27fa8b?w=600&auto=format&fit=crop&q=80', price:'From $79', duration:'Full Day' },
+          { name:'Yala National Park', location:'Southern', badge:'Wildlife', img:'https://images.unsplash.com/photo-1611509530890-c89c9741e4d3?w=600&auto=format&fit=crop&q=80', price:'From $129', duration:'Full Day' },
+        ],
 
-    menuBtn.addEventListener('click', () => {
-      mobileMenu.classList.remove('hidden');
-      mobileMenu.classList.add('flex');
-    });
+        testimonials: [
+          { name:'Sarah Thompson', location:'United Kingdom', tour:'3-Day Standard Tour', avatar:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80', text:'Ishan made our Sri Lanka trip absolutely magical. His knowledge, warmth and passion for his country shines through every moment. We saw places we never would have found on our own!' },
+          { name:'Marcus Bauer', location:'Germany', tour:'7-Day Premium Tour', avatar:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80', text:'Best tour guide we have ever had anywhere in the world. Ishan goes above and beyond — flexible, funny, punctual and incredibly knowledgeable. 10/10 would recommend to everyone.' },
+          { name:'Yuki Tanaka', location:'Japan', tour:'Day Trip — Sigiriya', avatar:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&auto=format&fit=crop&q=80', text:'A wonderful experience from start to finish. Ishan picked us up on time, explained everything in perfect English and made us feel so welcome. Sri Lanka is beautiful and Ishan makes it even more special.' },
+        ],
 
-    closeBtn.addEventListener('click', closeMobileMenu);
-
-    function closeMobileMenu() {
-      mobileMenu.classList.add('hidden');
-      mobileMenu.classList.remove('flex');
-    }
-
-    // Scroll fade-up animations
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
+        onScroll() {
+          this.scrolled = window.scrollY > 60;
+          this.initReveal();
+          if (!this.countersStarted && window.scrollY > 200) {
+            this.countersStarted = true;
+            this.animateCounters();
           }
-        });
-      }, { threshold: 0.12 });
+        },
 
-      document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+        initReveal() {
+          document.querySelectorAll('.reveal').forEach(el => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight - 80) {
+              el.classList.add('visible');
+            }
+          });
+        },
+
+        animateCounters() {
+          const animate = (key, target, isFloat, suffix) => {
+            let start = 0;
+            const step = target / 50;
+            const timer = setInterval(() => {
+              start += step;
+              if (start >= target) { start = target; clearInterval(timer); }
+              this.counters[key] = isFloat ? start.toFixed(1) : Math.round(start) + (suffix || '');
+            }, 30);
+          };
+          animate('tours',   48,  false);
+          animate('clients', 500, false);
+          animate('rating',  5.0, true);
+          animate('years',   10,  false);
+        },
+
+        submitForm() {
+          this.formSuccess = true;
+          setTimeout(() => this.formSuccess = false, 5000);
+        },
+
+        init() {
+          this.$nextTick(() => this.initReveal());
+        }
+      }
     }
   </script>
-
 </body>
 </html>
