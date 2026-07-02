@@ -1,0 +1,407 @@
+<!--
+============================================================
+Miracle Oman — Sustainability page
+WordPress "Custom HTML" block
+
+HOW TO USE
+1. In WP admin: Pages → Add New. Title it "Sustainability".
+2. Add a "Custom HTML" block (or Elementor "HTML" widget).
+3. Copy EVERYTHING below (from <link ... Google Fonts ... > down
+   to the closing </script>) and paste it into that one block.
+4. Upload the images in /assets/sustainability/ to Media Library,
+   then replace each `assets/sustainability/xxx.jpg` src in the
+   markup with the WP media URL, e.g.
+   https://miracleoman.travel/wp-content/uploads/2026/07/xxx.jpg
+5. Publish. The theme header/footer will wrap this content.
+6. To retint the page, edit the CSS variables inside `.mo-sustain`
+   at the top of the <style id="mo-sustain-styles"> block (e.g.
+   change --mo-forest to your brand's primary green).
+============================================================
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style id="mo-sustain-styles">
+  .mo-sustain{--mo-sand:#F7F3EB;--mo-papyrus:#EDE3D0;--mo-cream:#FBF7EF;--mo-ink:#2A2620;--mo-muted:#6C6558;--mo-line:#E4D9C4;--mo-forest:#1F3A2E;--mo-forest-2:#2D5544;--mo-terra:#B45B3E;--mo-gold:#C89A4A;--mo-sky:#EAF1EE;--mo-radius:18px;--mo-shadow:0 24px 60px -30px rgba(31,58,46,.35);color:var(--mo-ink);font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased;background:#FFFDF9}
+  .mo-sustain *{box-sizing:border-box}
+  .mo-sustain img{max-width:100%;height:auto;display:block}
+  .mo-sustain h1,.mo-sustain h2,.mo-sustain h3,.mo-sustain h4{font-family:'Playfair Display','Cormorant',Georgia,serif;font-weight:600;color:var(--mo-forest);letter-spacing:-.01em;margin:0 0 .5em;line-height:1.15}
+  .mo-sustain h1{font-size:clamp(2.4rem,5.4vw,4.25rem)}
+  .mo-sustain h2{font-size:clamp(1.9rem,3.4vw,2.75rem)}
+  .mo-sustain h3{font-size:clamp(1.25rem,2vw,1.55rem)}
+  .mo-sustain h4{font-size:1.125rem}
+  .mo-sustain p{margin:0 0 1.15em;color:#3A362F}
+  .mo-sustain .mo-eyebrow{display:inline-flex;align-items:center;gap:.6rem;font-family:'Inter',sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.28em;text-transform:uppercase;color:var(--mo-terra)}
+  .mo-sustain .mo-eyebrow::before{content:"";width:28px;height:1px;background:var(--mo-terra)}
+  .mo-sustain .mo-lead{font-size:1.125rem;color:#4A4438;line-height:1.75}
+  .mo-sustain .mo-wrap{max-width:1180px;margin:0 auto;padding:0 1.5rem}
+  .mo-sustain .mo-narrow{max-width:820px}
+  .mo-sustain section{padding:clamp(3rem,7vw,6rem) 0}
+  .mo-sustain .mo-grid-2{display:grid;grid-template-columns:1fr;gap:2.5rem;align-items:center}
+  @media (min-width:820px){.mo-sustain .mo-grid-2{grid-template-columns:1fr 1fr;gap:4rem}.mo-sustain .mo-grid-2--wide{grid-template-columns:1.15fr 1fr}}
+  .mo-sustain .mo-hero{position:relative;min-height:78vh;display:flex;align-items:flex-end;color:#fff;padding:0 0 clamp(3rem,7vw,5.5rem);background:linear-gradient(180deg,rgba(31,58,46,.15) 0%,rgba(31,58,46,.15) 45%,rgba(31,58,46,.82) 100%),url('https://images.unsplash.com/photo-1548013146-72479768bada?w=2000&auto=format&fit=crop&q=80') center/cover no-repeat}
+  .mo-sustain .mo-hero h1{color:#fff;margin-bottom:.35em}
+  .mo-sustain .mo-hero .mo-eyebrow{color:#F5C777}
+  .mo-sustain .mo-hero .mo-eyebrow::before{background:#F5C777}
+  .mo-sustain .mo-hero p{color:rgba(255,255,255,.85);font-size:1.125rem;max-width:620px}
+  .mo-sustain .mo-breadcrumb{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.75);margin-bottom:1.25rem}
+  .mo-sustain .mo-breadcrumb a{color:inherit;text-decoration:none;opacity:.85}
+  .mo-sustain .mo-intro{background:var(--mo-cream)}
+  .mo-sustain .mo-mission{background:var(--mo-forest);color:#F5EFDF;border-radius:var(--mo-radius);padding:clamp(2rem,5vw,3.5rem);box-shadow:var(--mo-shadow);position:relative;overflow:hidden}
+  .mo-sustain .mo-mission::before{content:"";position:absolute;inset:auto -80px -80px auto;width:280px;height:280px;background:radial-gradient(circle at center,rgba(200,154,74,.35),transparent 65%);pointer-events:none}
+  .mo-sustain .mo-mission h2,.mo-sustain .mo-mission h3{color:#F5EFDF}
+  .mo-sustain .mo-mission p{color:rgba(245,239,223,.88)}
+  .mo-sustain .mo-mission .mo-eyebrow{color:#F5C777}
+  .mo-sustain .mo-mission .mo-eyebrow::before{background:#F5C777}
+  .mo-sustain .mo-team-grid{display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin-top:2.5rem}
+  .mo-sustain .mo-team-card{background:#fff;border:1px solid var(--mo-line);border-radius:14px;padding:1.75rem 1.5rem;text-align:left;transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease}
+  .mo-sustain .mo-team-card:hover{transform:translateY(-4px);border-color:var(--mo-gold);box-shadow:0 20px 40px -25px rgba(31,58,46,.35)}
+  .mo-sustain .mo-team-card .mo-avatar{width:56px;height:56px;border-radius:50%;background:var(--mo-papyrus);color:var(--mo-forest);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:600;font-size:1.35rem;margin-bottom:1rem}
+  .mo-sustain .mo-team-card strong{display:block;font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--mo-forest);font-weight:600}
+  .mo-sustain .mo-team-card span{font-size:.82rem;color:var(--mo-muted);letter-spacing:.06em;text-transform:uppercase}
+  .mo-sustain .mo-consultant{background:var(--mo-papyrus)}
+  .mo-sustain .mo-pillars{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));margin-top:2.5rem}
+  .mo-sustain .mo-pillar{background:#fff;border:1px solid var(--mo-line);border-radius:14px;padding:1.75rem 1.5rem}
+  .mo-sustain .mo-pillar-num{font-family:'Playfair Display',serif;font-size:1rem;color:var(--mo-terra);letter-spacing:.15em;font-weight:600}
+  .mo-sustain .mo-pillar h3{margin-top:.35rem;font-size:1.2rem}
+  .mo-sustain .mo-pillar p{color:var(--mo-muted);font-size:.95rem;margin:0}
+  .mo-sustain .mo-metrics{display:grid;gap:1.25rem;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-top:2rem}
+  .mo-sustain .mo-metric{background:var(--mo-cream);border:1px solid var(--mo-line);border-radius:14px;padding:1.5rem}
+  .mo-sustain .mo-metric b{display:block;font-family:'Playfair Display',serif;color:var(--mo-forest);font-size:2.4rem;line-height:1;font-weight:600;margin-bottom:.4rem}
+  .mo-sustain .mo-metric span{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--mo-muted)}
+  .mo-sustain .mo-fig{position:relative;border-radius:var(--mo-radius);overflow:hidden;box-shadow:var(--mo-shadow)}
+  .mo-sustain .mo-fig img{width:100%;height:100%;object-fit:cover}
+  .mo-sustain .mo-initiatives{display:grid;gap:2rem;grid-template-columns:1fr;margin-top:3rem}
+  @media (min-width:860px){.mo-sustain .mo-initiatives{grid-template-columns:repeat(3,1fr)}}
+  .mo-sustain .mo-initiative{background:#fff;border-radius:var(--mo-radius);overflow:hidden;border:1px solid var(--mo-line);display:flex;flex-direction:column;transition:transform .35s ease,box-shadow .35s ease}
+  .mo-sustain .mo-initiative:hover{transform:translateY(-6px);box-shadow:0 30px 60px -30px rgba(31,58,46,.4)}
+  .mo-sustain .mo-initiative .mo-init-img{aspect-ratio:16/10;overflow:hidden;background:var(--mo-sand)}
+  .mo-sustain .mo-initiative .mo-init-img img{width:100%;height:100%;object-fit:cover;transition:transform .8s ease}
+  .mo-sustain .mo-initiative:hover .mo-init-img img{transform:scale(1.06)}
+  .mo-sustain .mo-initiative .mo-init-body{padding:1.75rem;display:flex;flex-direction:column;gap:.5rem;flex:1}
+  .mo-sustain .mo-initiative .mo-tag{align-self:flex-start;background:var(--mo-sky);color:var(--mo-forest);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;padding:.35rem .8rem;border-radius:999px;font-weight:600}
+  .mo-sustain .mo-initiative h3{font-size:1.35rem;margin:.35rem 0 .25rem}
+  .mo-sustain .mo-initiative p{font-size:.95rem;color:var(--mo-muted);margin:0}
+  .mo-sustain .mo-policies{background:var(--mo-forest);color:#F5EFDF;border-radius:var(--mo-radius);padding:clamp(2rem,5vw,3.5rem);position:relative;overflow:hidden}
+  .mo-sustain .mo-policies h2{color:#fff}
+  .mo-sustain .mo-policies .mo-eyebrow{color:#F5C777}
+  .mo-sustain .mo-policies .mo-eyebrow::before{background:#F5C777}
+  .mo-sustain .mo-policy-list{list-style:none;padding:0;margin:2rem 0 0;display:grid;gap:.65rem}
+  .mo-sustain .mo-policy-list li a{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.4rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#F5EFDF;text-decoration:none;font-family:'Inter',sans-serif;font-weight:500;transition:background .25s ease,border-color .25s ease,transform .25s ease}
+  .mo-sustain .mo-policy-list li a:hover{background:rgba(255,255,255,.11);border-color:rgba(245,199,119,.5);transform:translateX(4px)}
+  .mo-sustain .mo-policy-list svg{width:18px;height:18px;opacity:.75;flex-shrink:0;margin-left:1rem}
+  .mo-sustain .mo-guide{background:linear-gradient(135deg,var(--mo-terra) 0%,#C6704F 100%);color:#fff;border-radius:var(--mo-radius);padding:clamp(2.25rem,5vw,3.5rem);display:grid;gap:1.25rem;align-items:center;grid-template-columns:1fr;box-shadow:var(--mo-shadow)}
+  @media (min-width:820px){.mo-sustain .mo-guide{grid-template-columns:2fr 1fr}}
+  .mo-sustain .mo-guide h2,.mo-sustain .mo-guide h3{color:#fff}
+  .mo-sustain .mo-guide p{color:rgba(255,255,255,.9);margin:0}
+  .mo-sustain .mo-guide .mo-eyebrow{color:#FFE9B8}
+  .mo-sustain .mo-guide .mo-eyebrow::before{background:#FFE9B8}
+  .mo-sustain .mo-btn{display:inline-flex;align-items:center;gap:.55rem;background:#fff;color:var(--mo-terra);padding:.9rem 1.5rem;border-radius:999px;font-weight:600;text-decoration:none;justify-self:start;transition:transform .2s ease,box-shadow .2s ease}
+  .mo-sustain .mo-btn:hover{transform:translateY(-2px);box-shadow:0 12px 28px -12px rgba(0,0,0,.35)}
+  .mo-sustain .mo-highlight{border-left:3px solid var(--mo-terra);padding:.5rem 0 .5rem 1.25rem;font-family:'Playfair Display',serif;font-style:italic;font-size:1.2rem;color:var(--mo-forest);line-height:1.5;margin:1.5rem 0}
+  .mo-sustain .mo-sdg-row{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.5rem}
+  .mo-sustain .mo-sdg{background:rgba(245,199,119,.15);color:#F5EFDF;border:1px solid rgba(245,199,119,.35);padding:.4rem .85rem;border-radius:999px;font-size:.75rem;letter-spacing:.08em}
+  .mo-sustain .mo-div{width:64px;height:2px;background:var(--mo-gold);margin:1.5rem 0;border-radius:2px}
+  .mo-sustain .mo-section-title{max-width:720px;margin:0 auto 3rem;text-align:center}
+  .mo-sustain .mo-section-title .mo-eyebrow{justify-content:center;padding:.35rem 1rem;background:var(--mo-papyrus);color:var(--mo-forest-2);border-radius:999px;margin-bottom:1rem}
+  .mo-sustain .mo-section-title .mo-eyebrow::before{display:none}
+  .mo-sustain .mo-section-title h2{margin-bottom:1rem}
+  .mo-sustain .mo-section-title p{color:var(--mo-muted);font-size:1.05rem;margin:0}
+  @media (prefers-reduced-motion:no-preference){.mo-sustain .mo-fade{opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease}.mo-sustain .mo-fade.is-visible{opacity:1;transform:none}}
+</style>
+
+<main class="mo-sustain">
+
+  <section class="mo-hero">
+    <div class="mo-wrap">
+      <p class="mo-breadcrumb"><a href="/about-us/">About Us</a> &nbsp;/&nbsp; Sustainability</p>
+      <span class="mo-eyebrow">About Us</span>
+      <h1>Sustainability at&nbsp;Miracle&nbsp;Oman</h1>
+      <p>Crafting responsible journeys that protect Oman&rsquo;s landscapes, honour its culture, and uplift the communities that make it extraordinary.</p>
+    </div>
+  </section>
+
+  <section class="mo-intro">
+    <div class="mo-wrap mo-narrow">
+      <span class="mo-eyebrow">Our Commitment</span>
+      <h2>Tourism as a force for good.</h2>
+      <p class="mo-lead">Climate change and global warming pose significant threats &mdash; desertification, water scarcity, and loss of biodiversity are pressing concerns. To help keep the global temperature rise below 1.5&nbsp;&deg;C, we support the Paris Agreement and recognise our responsibility, as a business, to contribute to that global effort.</p>
+      <p>By adopting sustainable practices, we aim to mitigate environmental impact, safeguard Oman&rsquo;s natural and cultural heritage, and ensure the long-term viability of our tourism industry. Our commitment reflects broader international goals and a genuine dedication to a resilient, sustainable future for the sector.</p>
+      <div class="mo-div"></div>
+      <p>Since our inception, crafting sustainable travel experiences through Oman has never been just an option for Miracle Oman Travel &mdash; it is our passion, and our utmost priority. Sustainability is deeply embedded in our DNA.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="mo-wrap">
+      <div class="mo-mission mo-fade">
+        <span class="mo-eyebrow">Mission Statement</span>
+        <h2 style="max-width:780px;">Transformative travel that honours Oman&rsquo;s people, culture, and land.</h2>
+        <p class="mo-lead" style="color:#F1E5CC;">At Miracle Oman, we are dedicated to crafting transformative travel experiences that foster meaningful connections between travellers and the rich culture of Oman. Through a variety of customised projects, we partner with local businesses, artisans, and community organisations, ensuring that each initiative supports sustainable economic growth and preserves Oman&rsquo;s unique heritage.</p>
+        <p>We are committed to sustainability, actively aligning our efforts with the United Nations Sustainable Development Goals (SDGs). By working with eco-friendly partners, minimising waste, and prioritising conservation, we strive to protect Oman&rsquo;s stunning landscapes, diverse wildlife, and delicate ecosystems. Our projects are designed to create a lasting, positive impact on both the environment and the communities we engage with &mdash; ensuring a sustainable future for generations to come.</p>
+        <div class="mo-sdg-row" aria-label="United Nations SDGs">
+          <span class="mo-sdg">SDG 8 &middot; Decent Work</span>
+          <span class="mo-sdg">SDG 11 &middot; Sustainable Communities</span>
+          <span class="mo-sdg">SDG 12 &middot; Responsible Consumption</span>
+          <span class="mo-sdg">SDG 13 &middot; Climate Action</span>
+          <span class="mo-sdg">SDG 15 &middot; Life on Land</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="mo-wrap">
+      <div class="mo-section-title">
+        <span class="mo-eyebrow">The People Behind It</span>
+        <h2>Our Sustainability Team</h2>
+        <p>A multidisciplinary team, driving our sustainability agenda every day.</p>
+      </div>
+      <div class="mo-team-grid">
+        <div class="mo-team-card mo-fade"><div class="mo-avatar">RJ</div><strong>Ruwan Jayasekara</strong><span>Ecotourism Consultant</span></div>
+        <div class="mo-team-card mo-fade"><div class="mo-avatar">KR</div><strong>Kunchana Ranchagoda</strong><span>Sustainability Coordinator</span></div>
+        <div class="mo-team-card mo-fade"><div class="mo-avatar">RW</div><strong>Ridma Withanage</strong><span>Sustainability Team</span></div>
+        <div class="mo-team-card mo-fade"><div class="mo-avatar">SS</div><strong>Shairajet Sto. Tomas</strong><span>Sustainability Team</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mo-consultant">
+    <div class="mo-wrap">
+      <div class="mo-grid-2 mo-grid-2--wide">
+        <div class="mo-fade">
+          <span class="mo-eyebrow">A Message From Our Consultant</span>
+          <h2>&ldquo;Tourism should not only create memorable journeys &mdash; it should protect what makes them possible.&rdquo;</h2>
+          <p class="mo-lead">When I first worked in Oman in 1996 as a German-speaking trekking guide, I immediately fell in love with the country&rsquo;s breathtaking natural beauty, its extraordinary geological diversity, and the genuine hospitality of its people. Since then, Oman has remained a place very close to my heart.</p>
+          <p>From vast deserts and dramatic wadis to the green mountain landscapes of Jebel Akhdar and Jebel Shams, Oman is a country of remarkable ecological and cultural richness. Its diverse ecosystems, unique flora and fauna, and deeply rooted traditions create unforgettable experiences for travellers seeking authentic connections with nature and local communities.</p>
+          <p>Today, it is a great privilege to work with Miracle Oman Travel as an Ecotourism Consultant alongside a passionate international team from different continents. Together, we strongly believe that tourism should not only create memorable journeys, but also contribute positively to environmental conservation and the wellbeing of local communities.</p>
+          <p class="mo-highlight">The changing light over the mountains, the silence of remote valleys, the fresh mountain air, and the crystal-clear rock pools hidden within the wadis &mdash; these give travellers a rare opportunity to slow down, disconnect, and reconnect with nature.</p>
+          <p>Ecotourism in Oman means responsibly exploring pristine landscapes and respecting local culture. Along the trekking routes of Jebel Akhdar and Jebel Shams, visitors are often welcomed with traditional Omani coffee and fresh dates by the Jebalis &mdash; families who have lived in harmony with nature for generations. Travellers can observe ancient falaj irrigation, terrace cultivation, and lifestyles built on deep respect for water, land, and natural resources.</p>
+          <p>At Miracle Oman, we promote responsible and sustainable travel guided by the principle of &ldquo;leave no footprints behind.&rdquo; We believe tourism can become a force for protecting nature, preserving heritage, and creating sustainable livelihoods for future generations.</p>
+          <p style="margin-top:1.75rem;"><strong style="font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--mo-forest);">Ruwan Jayasekara</strong><br><span style="font-size:.85rem;letter-spacing:.1em;text-transform:uppercase;color:var(--mo-muted);">Ecotourism Consultant, Miracle Oman Travel</span></p>
+        </div>
+        <div class="mo-fig mo-fade">
+          <!-- REPLACE with a portrait photo of Ruwan when uploaded to Media Library -->
+          <img src="https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=1200&auto=format&fit=crop&q=80" alt="Trekking through Oman's mountain landscapes" style="aspect-ratio:4/5;object-fit:cover;border-radius:var(--mo-radius);">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="mo-wrap">
+      <div class="mo-grid-2">
+        <div class="mo-fade">
+          <span class="mo-eyebrow">People</span>
+          <h2>Our people are at the heart of everything we do.</h2>
+          <p>We are committed to fostering a workplace and wider community where every individual is treated with fairness, dignity, and respect. Our employees enjoy a safe, inclusive, and harassment-free environment, with equal access to professional growth regardless of gender, nationality, or background &mdash; reflected in our near-equal gender representation across the team.</p>
+          <p>We uphold freedom of association, open communication, and fair employment practices fully aligned with Oman&rsquo;s Labour Law. Beyond our team, we actively invest in the communities we operate within &mdash; prioritising local suppliers, guides, and artisans, supporting family-run businesses, and committing <strong>5% of annual profits to community-based tourism initiatives</strong>.</p>
+        </div>
+        <div class="mo-pillars mo-fade" style="margin-top:0;">
+          <div class="mo-pillar"><div class="mo-pillar-num">01</div><h3>Fair &amp; equal workplace</h3><p>Equal access to growth regardless of gender, nationality, or background &mdash; with near-equal gender representation.</p></div>
+          <div class="mo-pillar"><div class="mo-pillar-num">02</div><h3>Zero tolerance</h3><p>For harassment, bullying, and forced or child labour across all operations and supply chain.</p></div>
+          <div class="mo-pillar"><div class="mo-pillar-num">03</div><h3>Community investment</h3><p>5% of annual profits directed to community-based tourism initiatives across Oman.</p></div>
+          <div class="mo-pillar"><div class="mo-pillar-num">04</div><h3>Open dialogue</h3><p>Regular meetings, quarterly satisfaction surveys, and confidential grievance channels.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mo-intro">
+    <div class="mo-wrap">
+      <div class="mo-section-title">
+        <span class="mo-eyebrow">Inside The Office</span>
+        <h2>Sustainable Workplace Practices</h2>
+        <p>Sustainability starts at home &mdash; and for us, that means our office. We are proud participants in the Travelife Certification Program.</p>
+      </div>
+      <div class="mo-grid-2">
+        <div class="mo-fade">
+          <h3>Energy, water &amp; the everyday</h3>
+          <p>LED lighting, energy-efficient appliances, scheduled cooling with energy-saving thermostats, and a strict switch-off policy after working hours. We actively monitor and track our monthly energy and water consumption.</p>
+          <h3>Zero single-use plastics</h3>
+          <p>Waste is minimised through formal segregation, restricted and double-sided printing, bulk purchasing of recycled materials, and the complete elimination of single-use plastics from our office. All documentation is stored digitally, and paperless communications are standard practice.</p>
+          <h3>Held accountable, monthly</h3>
+          <p>A monthly Sustainability Monitor oversees workplace checklists and reports progress to management, ensuring we stay accountable and keep improving. Remote work options help reduce commute-related emissions.</p>
+        </div>
+        <div class="mo-fade">
+          <div class="mo-metrics">
+            <div class="mo-metric"><b>&minus;20%</b><span>Energy target by 2027</span></div>
+            <div class="mo-metric"><b>&minus;20%</b><span>Water target by 2027</span></div>
+            <div class="mo-metric"><b>0</b><span>Single-use plastics</span></div>
+            <div class="mo-metric"><b>100%</b><span>Digital documentation</span></div>
+          </div>
+          <p style="margin-top:1.5rem;font-size:.95rem;color:var(--mo-muted);">These practices reflect our belief that responsible tourism begins with how we operate every single day.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="mo-wrap">
+      <div class="mo-grid-2">
+        <div class="mo-fig mo-fade">
+          <!-- REPLACE with WP media URL after uploading training-2025.png -->
+          <img src="assets/sustainability/training-2025.png" alt="Miracle Oman sustainability training session, November 2025" style="aspect-ratio:4/3;object-fit:cover;">
+        </div>
+        <div class="mo-fade">
+          <span class="mo-eyebrow">Lead the Change</span>
+          <h2>Sustainability training for a responsible tourism future.</h2>
+          <p>As part of our ongoing commitment to responsible tourism, we conduct <strong>annual sustainability training</strong> for our internal staff, guides, suppliers, hotel partners, and other key stakeholders &mdash; keeping everyone updated with the latest practices and industry expectations.</p>
+          <p>In <strong>November 2025</strong>, the session was led by our sustainability consultant, Mr.&nbsp;Ruwan&nbsp;Jayasekara, focusing on sustainable tourism practices, stakeholder responsibilities, environmental and cultural preservation, and the importance of working together toward a more sustainable future for tourism in Oman.</p>
+          <p>The programme also highlighted practical actions and best practices that can be implemented in day-to-day operations to create a positive impact on the industry, local communities, and the environment.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mo-consultant">
+    <div class="mo-wrap">
+      <div class="mo-section-title">
+        <span class="mo-eyebrow">Social Sustainability</span>
+        <h2>An inclusive, multicultural workforce.</h2>
+        <p>Our team is a vibrant family representing 11 nationalities, with a balanced representation of genders that reflects our genuine commitment to equality and inclusion.</p>
+      </div>
+      <div class="mo-pillars">
+        <div class="mo-pillar mo-fade"><div class="mo-pillar-num">Nationalities</div><h3>11 countries, one family</h3><p>Oman, Sri Lanka, the Philippines, Mauritius, Egypt, Italy, India, Greece, Russia, Austria, and Iraq.</p></div>
+        <div class="mo-pillar mo-fade"><div class="mo-pillar-num">Recruitment</div><h3>Skill, merit, potential</h3><p>Equal access to development and advancement. Recruitment and promotion are free from discrimination of any kind.</p></div>
+        <div class="mo-pillar mo-fade"><div class="mo-pillar-num">Well-being</div><h3>Fair wages, safe hours</h3><p>Full compliance with Oman&rsquo;s Labour Law and zero tolerance for harassment, bullying, or forced/child labour.</p></div>
+        <div class="mo-pillar mo-fade"><div class="mo-pillar-num">Voice</div><h3>Heard &amp; supported</h3><p>Regular staff meetings, quarterly satisfaction surveys, and confidential grievance channels.</p></div>
+        <div class="mo-pillar mo-fade"><div class="mo-pillar-num">Belonging</div><h3>Family beyond the office</h3><p>Social gatherings, outings, celebrations, trekking, canyoning &mdash; and personal support during challenging times.</p></div>
+        <div class="mo-pillar mo-fade"><div class="mo-pillar-num">Culture</div><h3>Genuine respect</h3><p>Everyone in the Miracle Oman family feels valued, respected, and empowered &mdash; every day.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="mo-wrap">
+      <div class="mo-grid-2">
+        <div class="mo-fade">
+          <span class="mo-eyebrow">Responsible Procurement</span>
+          <h2>Every partnership carries our values.</h2>
+          <p>We prioritise <strong>local and regional small and medium enterprises</strong> and individual suppliers who share our values &mdash; giving preference to those who are energy-efficient, use renewable energy, and demonstrate a positive environmental and societal impact.</p>
+          <p>All suppliers are expected to comply with local labour laws, human rights standards, and basic environmental practices, with <strong>zero tolerance for child labour, forced labour, or discrimination</strong>. Sustainability expectations are embedded in every supplier contract, and partners are evaluated annually.</p>
+          <p style="color:var(--mo-muted);font-style:italic;">&ldquo;Every dirham spent should support a more sustainable and inclusive tourism economy for Oman.&rdquo;</p>
+        </div>
+        <div class="mo-fade">
+          <span class="mo-eyebrow">Accommodation Selection</span>
+          <h2>Every stay is a conscious choice.</h2>
+          <p>Beyond comfort and location, we evaluate each property on renewable energy use, carbon impact, water conservation, and waste management. Preference is given to <strong>eco-lodges, camps, and hotels</strong> that support the local economy through regional employment and community sourcing.</p>
+          <p>We encourage all accommodation partners to promote gender inclusivity in their workforce, including at managerial levels &mdash; and all partners are assessed annually to ensure alignment with our sustainability standards and values.</p>
+          <p style="color:var(--mo-muted);font-style:italic;">&ldquo;A conscious choice &mdash; for our guests, for local communities, and for Oman.&rdquo;</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mo-intro">
+    <div class="mo-wrap">
+      <div class="mo-section-title">
+        <span class="mo-eyebrow">Local Communities</span>
+        <h2>Real, lasting value for the communities that make Oman extraordinary.</h2>
+        <p>Supporting local people, preserving traditions, and promoting sustainable livelihoods is not an afterthought &mdash; it is at the heart of everything we do.</p>
+      </div>
+      <div class="mo-grid-2">
+        <div class="mo-fade">
+          <h3>Collaboration with local organisations</h3>
+          <p>We actively partner with the <strong>Oman Women&rsquo;s Association</strong> and local cottage industries, weaving these meaningful connections into our guests&rsquo; experiences. Visits to community projects are incorporated into our tours, and guests are encouraged to purchase locally made products &mdash; directly channelling economic benefits back to the people who need it most.</p>
+          <p>We commit a portion of our annual profits to community-based tourism initiatives, reinforcing our long-term investment in the communities we serve.</p>
+        </div>
+        <div class="mo-fade">
+          <h3>Local suppliers for every adventure</h3>
+          <p>All suppliers providing adventure experiences &mdash; mountain camping, canyoning, trekking, canoeing, mountain biking &mdash; are sourced locally, ensuring that economic benefits remain within the community.</p>
+          <p>We actively engage with local farmers and fishing communities, integrating their homes, traditions, and livelihoods into our guest experiences. From meals in heritage homes to authentic encounters with fishing communities, every experience fosters genuine cultural exchange while supporting local traditions.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="mo-wrap">
+      <div class="mo-section-title">
+        <span class="mo-eyebrow">Our Initiatives</span>
+        <h2>Boots on the ground, every year.</h2>
+        <p>At least one meaningful community or environmental initiative every year &mdash; because true sustainability is as much about people as it is about the planet.</p>
+      </div>
+      <div class="mo-initiatives">
+
+        <article class="mo-initiative mo-fade">
+          <div class="mo-init-img">
+            <!-- REPLACE with a Ramadan initiative photo once available -->
+            <img src="https://images.unsplash.com/photo-1518398046578-8cca57782e17?w=1200&auto=format&fit=crop&q=80" alt="Ramadan charity distribution">
+          </div>
+          <div class="mo-init-body">
+            <span class="mo-tag">Ramadan 2026</span>
+            <h3>Giving back during the Holy Month</h3>
+            <p>During Ramadan 2026, our Sustainability Team prepared and distributed charity boxes filled with dry rations to construction workers across Muscat &mdash; many of them migrants observing the Holy Month far from their families. Responsible tourism reaches into the lives of every person in the communities we call home.</p>
+          </div>
+        </article>
+
+        <article class="mo-initiative mo-fade">
+          <div class="mo-init-img">
+            <img src="assets/sustainability/mutrah-cleanup-2.jpeg" alt="Mutrah trail clean-up volunteer">
+          </div>
+          <div class="mo-init-body">
+            <span class="mo-tag">Mutrah Trail</span>
+            <h3>Clean-up hike, Mutrah Trail</h3>
+            <p>The team conducted a clean-up hike along one of Muscat&rsquo;s most popular yet heavily littered mountain trails, collecting and correctly disposing of several bags of waste. A direct contribution to biodiversity, wildlife protection, and the visitor experience &mdash; and a living expression of our &ldquo;leave no trace&rdquo; principle.</p>
+          </div>
+        </article>
+
+        <article class="mo-initiative mo-fade">
+          <div class="mo-init-img">
+            <img src="assets/sustainability/wakan-jabal-akhdar.jpeg" alt="Team hiking from Wakan Village to Jabal Akhdar">
+          </div>
+          <div class="mo-init-body">
+            <span class="mo-tag">Wakan &rarr; Jabal Akhdar</span>
+            <h3>A 9-hour clean-up on a lesser-travelled trail</h3>
+            <p>A demanding 9-hour hike from Wakan Village to Jabal Akhdar &mdash; one of Oman&rsquo;s toughest mountain routes. Despite the terrain, the team collected garbage along the way, protecting a fragile ecosystem in a corner of Oman that&rsquo;s rarely reached &mdash; and just as rarely cleaned.</p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="mo-wrap">
+      <div class="mo-policies mo-fade">
+        <span class="mo-eyebrow">Sustainable Policies &amp; Guidelines</span>
+        <h2>Our commitments, put in writing.</h2>
+        <p style="color:rgba(245,239,223,.85);max-width:640px;">We publish our policies openly so guests, partners, and communities can hold us to them. Each document is reviewed and updated regularly.</p>
+        <ul class="mo-policy-list">
+          <li><a href="#" aria-label="Download Miracle Oman Sustainability Policy">Miracle Oman Sustainability Policy<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a></li>
+          <li><a href="#" aria-label="Download Captive Wildlife Ethical Tourism Policy">Captive Wildlife Ethical Tourism Policy<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a></li>
+          <li><a href="#" aria-label="Download Health and Safety Policy">Health and Safety Policy<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a></li>
+          <li><a href="#" aria-label="Download Illegal Souvenirs and Responsible Shopping Policy">Illegal Souvenirs &amp; Responsible Shopping Policy<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="mo-wrap">
+      <div class="mo-guide mo-fade">
+        <div>
+          <span class="mo-eyebrow">Coming Soon</span>
+          <h2>Your Guide to Responsible Travel in Oman</h2>
+          <p>A practical handbook for visiting Oman with respect &mdash; how to trek without a trace, honour local customs, shop responsibly, and travel in a way that gives back to the country you came to see. Add your email and we&rsquo;ll send it when it&rsquo;s ready.</p>
+        </div>
+        <a href="#" class="mo-btn">Notify Me<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  (function(){
+    if(!('IntersectionObserver' in window)) return;
+    var els=document.querySelectorAll('.mo-sustain .mo-fade');
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+    },{threshold:0.15});
+    els.forEach(function(el){ io.observe(el); });
+  })();
+</script>
